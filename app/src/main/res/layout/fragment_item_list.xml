@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:name="com.example.tong.jiaowuxitong.view.fragment.StudentFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/recycler_container"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.tong.jiaowuxitong.view.fragment.StudentFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animationCache="true"
+        tools:listitem="@layout/m_s_card" />
+    <ProgressBar
+        android:layout_margin="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/pb"/>
+
+    <TextView
+        android:id="@+id/n_data"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_below="@id/midd"
+        android:layout_marginTop="7dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/here_is_nothing"/>
+
+</RelativeLayout>

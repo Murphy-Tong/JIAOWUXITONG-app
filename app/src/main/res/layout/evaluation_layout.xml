@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.NoActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/fab_margin"
+    android:orientation="vertical"
+    tools:context=".view.views.CourseEvaluationActivity">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:elevation="3dp">
+
+        <TextView
+            android:id="@+id/evaluation_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+    </android.support.v4.widget.NestedScrollView>
+
+    <RadioGroup
+        android:id="@+id/evaluation_radiogroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nest"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginTop="20dp">
+
+        <RadioButton
+            android:id="@+id/evluation_vg"
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="1.0"
+            android:text="非常同意"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/evluation_g"
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="0.75"
+            android:text="同意"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/evluation_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="0.5"
+            android:text="基本同意"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/evluation_ng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="0.25"
+            android:text="不同意"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/evluation_vng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="0.0"
+            android:text="很不同意"
+            android:textColor="@color/black" />
+    </RadioGroup>
+</LinearLayout>
+

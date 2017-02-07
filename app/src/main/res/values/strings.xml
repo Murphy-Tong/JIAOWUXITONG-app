@@ -1,0 +1,182 @@
+<resources>
+    <string name="app_name">JIAOWUXITONG</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">password can not be null</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="username">username</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_user">UserActivity</string>
+    <string name="large_text">
+        "Material is the metaphor.\n\n"
+
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic.\n"
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
+        "flexibility of the material creates new affordances that supercede those in the physical "
+        "world, without breaking the rules of physics.\n"
+        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "interact, and exist in space and in relation to each other. Realistic lighting shows "
+        "seams, divides space, and indicates moving parts.\n\n"
+
+        "Bold, graphic, intentional.\n\n"
+
+        "The foundational elements of print based design typography, grids, space, scale, color, "
+        "and use of imagery guide visual treatments. These elements do far more than please the "
+        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
+        "imagery, large scale typography, and intentional white space create a bold and graphic "
+        "interface that immerse the user in the experience.\n"
+        "An emphasis on user actions makes core functionality immediately apparent and provides "
+        "waypoints for the user.\n\n"
+
+        "Motion provides meaning.\n\n"
+
+        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
+        "inflection points that initiate motion, transforming the whole design.\n"
+        "All action takes place in a single environment. Objects are presented to the user without "
+        "breaking the continuity of experience even as they transform and reorganize.\n"
+        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
+        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
+
+        "3D world.\n\n"
+
+        "The material environment is a 3D space, which means all objects have x, y, and z "
+        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
+        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
+        "position along the z-axis and has a standard 1dp thickness.\n"
+        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
+        "emulated by manipulating the y-axis.\n\n"
+
+        "Light and shadow.\n\n"
+
+        "Within the material environment, virtual lights illuminate the scene. Key lights create "
+        "directional shadows, while ambient light creates soft shadows from all angles.\n"
+        "Shadows in the material environment are cast by these two light sources. In Android "
+        "development, shadows occur when light sources are blocked by sheets of material at "
+        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
+        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
+
+        "Resting elevation.\n\n"
+
+        "All material objects, regardless of size, have a resting elevation, or default elevation "
+        "that does not change. If an object changes elevation, it should return to its resting "
+        "elevation as soon as possible.\n\n"
+
+        "Component elevations.\n\n"
+
+        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
+        "does not vary from 6dp in one app to 16dp in another app).\n"
+        "Components may have different resting elevations across platforms, depending on the depth "
+        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
+
+        "Responsive elevation and dynamic elevation offsets.\n\n"
+
+        "Some component types have responsive elevation, meaning they change elevation in response "
+        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
+        "changes are consistently implemented using dynamic elevation offsets.\n"
+        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
+        "to the component’s resting state. They ensure that elevation changes are consistent "
+        "across actions and component types. For example, all components that lift on press have "
+        "the same elevation change relative to their resting elevation.\n"
+        "Once the input event is completed or cancelled, the component will return to its resting "
+        "elevation.\n\n"
+
+        "Avoiding elevation interference.\n\n"
+
+        "Components with responsive elevations may encounter other components as they move between "
+        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
+        "through other material, components avoid interfering with one another any number of ways, "
+        "whether on a per component basis or using the entire app layout.\n"
+        "On a component level, components can move or be removed before they cause interference. "
+        "For example, a floating action button (FAB) can disappear or move off screen before a "
+        "user picks up a card, or it can move if a snackbar appears.\n"
+        "On the layout level, design your app layout to minimize opportunities for interference. "
+        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
+        "when a user tries to pick up one of cards.\n\n"
+    </string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="evaluated">已评估</string>
+    <string name="unevaluated">尚未评估</string>
+    <string name="degree">成绩:%1$s</string>
+    <string name="student_count_in_class">共:%1$d 人</string>
+    <string name="undegree_student_count">%1$d 未被打分</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="your_evaluation_total">评估总分:%1$f</string>
+    <string name="eva_c">%1$d/%2$d</string>
+    <string name="evaDetail">您的评教分数:%1$s 超过本班%2$s</string>
+    <string name="degreeDetail">您的分数:%1$s 超过本班%2$s</string>
+    <string name="title_activity_input_degree">InputDegreeActivity</string>
+    <string name="number">number:%1$d</string>
+    <string name="title_activity_course_degree">CourseDegreeActivity</string>
+    <string name="title_activity_course_detail">CourseDetailActivity</string>
+    <string name="t_degree_get">我的得分:%1$s</string>
+    <string name="t_degree_dept_get">部门平均分:%1$s</string>
+    <string name="t_degree_total">总分:%1$s</string>
+    <string name="t_eva_std_count">共: %1$d人, %2$d 人未评价</string>
+    <string name="title_activity_manager">ManagerActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="here_is_nothing">这里什么都没有</string>
+    <string name="loading">努力加载中...</string>
+    <string name="confrim_choose">"确认选择 "</string>
+    <string name="course_eva">教学评估</string>
+    <string name="save_now">"立即保存"</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="save_ok">保存成功</string>
+    <string name="input_degree">输入成绩</string>
+    <string name="manage">管理</string>
+    <string name="manage_dept">管理部门</string>
+    <string name="manage_thr">管理教师</string>
+    <string name="manage_std">管理学生</string>
+    <string name="manage_cls">管理班级</string>
+    <string name="alter_confg">修改信息</string>
+    <string name="search">搜索</string>
+    <string name="course">课程</string>
+    <string name="thr">教师</string>
+    <string name="std">学生</string>
+    <string name="submit">提交</string>
+    <string name="evaed">已评价</string>
+    <string name="user_not_found">没这个人</string>
+    <string name="eva_course_alert">您还没有评价这门课程，先去评价一下吧！</string>
+    <string name="yes_button_text">好</string>
+    <string name="no_button_text">算了</string>
+    <string name="exit_app_toast">再按一次退出</string>
+    <string name="degree_std_alert">"还有学生没有给定成绩，先去输入成绩？"</string>
+    <string name="save_succ">保存成功</string>
+    <string name="success">成功</string>
+    <string name="update_eva_error">好像出问题了!!</string>
+    <string name="submit_failed">提交失败</string>
+    <string name="failed">好像出问题了</string>
+    <string name="pwd_error">密码错误</string>
+    <string name="delete_text">确定删除这个吗？不能恢复！</string>
+    <string name="undegree">老师还没有打分</string>
+    <string name="add_dept">添加部门</string>
+    <string name="add_thr">添加教师</string>
+    <string name="add_std">添加学生</string>
+    <string name="add_crs">add course</string>
+    <string name="pls_choose_thr">请选择一名教师！</string>
+    <string name="pls_choose_gender">请选择一个性别!</string>
+    <string name="pwd_not_same">密码不一致!</string>
+    <string name="pls_choose_dept">请选择一个部门！</string>
+    <string name="add_succ">添加成功！</string>
+    <string name="add_fail">添加失败！</string>
+    <string name="press_again_to_exit">再按一次退出</string>
+    <string name="c_std_not_degree">"还有学生违背打分，去打分!"</string>
+</resources>

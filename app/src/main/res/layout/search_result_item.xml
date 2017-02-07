@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:foregroundGravity="center_vertical"
+    app:cardBackgroundColor="@color/cardview_light_background"
+    app:elevation="1dp"
+    app:cardCornerRadius="5dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true"
+    app:contentPadding="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:visibility="invisible"
+            android:id="@+id/button"
+            android:background="@drawable/ripple_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="管理" />
+
+        <RelativeLayout
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/button"
+            android:layout_alignTop="@id/button"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:transitionName="name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:singleLine="true" />
+
+            <TextView
+                android:transitionName="id"
+                android:id="@+id/id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/name"
+                android:padding="3dp"
+                android:singleLine="true" />
+
+        </RelativeLayout>
+        <TextView
+            android:layout_margin="5dp"
+            android:layout_below="@id/text"
+            android:layout_width="match_parent"
+            android:singleLine="true"
+            android:gravity="center"
+            android:id="@+id/type"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
