@@ -253,7 +253,7 @@ public class AddActivity extends BaseActivity {
             return;
         }
         if (choosedTeacher == null) {
-            ViewTool.showSnack(null, courseView, getString(R.string.pls_choose_thr));
+            ViewTool.showSnack(this, courseView, getString(R.string.pls_choose_thr));
             return;
         }
 
@@ -305,7 +305,7 @@ public class AddActivity extends BaseActivity {
         View viewById = sradioGroup.findViewById(sradioGroup.getCheckedRadioButtonId());
         if (viewById == null || !(viewById instanceof RadioButton)) {
             sradioGroup.requestFocus();
-            ViewTool.showSnack(null, stdView, getString(R.string.pls_choose_gender));
+            ViewTool.showSnack(this, stdView, getString(R.string.pls_choose_gender));
             return;
         }
 
@@ -382,13 +382,13 @@ public class AddActivity extends BaseActivity {
         View viewById = tradioGroup.findViewById(tradioGroup.getCheckedRadioButtonId());
         if (viewById == null || !(viewById instanceof RadioButton)) {
             tradioGroup.requestFocus();
-            ViewTool.showSnack(null, thrView, getString(R.string.pls_choose_gender));
+            ViewTool.showSnack(this, thrView, getString(R.string.pls_choose_gender));
             return;
         }
 
         if (choosedDept == null) {
             talter.requestFocus();
-            ViewTool.showSnack(null, thrView, getString(R.string.pls_choose_dept));
+            ViewTool.showSnack(this, thrView, getString(R.string.pls_choose_dept));
             return;
         }
 

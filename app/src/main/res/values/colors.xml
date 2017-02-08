@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <color name="snackBarTextColor">#fffefefe</color>
+    <color name="snackBarBackground">#fffb7299</color>
     <color name="theme_color_card">#fffafafa</color>
     <color name="card_click">#FF4081</color>
     <color name="transparent">#51101000</color><!--透明色 -->

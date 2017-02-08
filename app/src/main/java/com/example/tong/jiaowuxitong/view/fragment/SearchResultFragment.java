@@ -170,7 +170,7 @@ public class SearchResultFragment extends BaseFragment {
     private boolean isLoading = false;
 
     private void loadMore() {
-        ViewTool.showSnack(mContext, recyclerView, "loading...");
+        ViewTool.showSnack(mContext, recyclerView, mContext.getString(R.string.loading));
         if (!isLoading) {
             isLoading = true;
             NetUtil.asyncPost(GsonUtil.toJson(query), GlobalResource.QUERY_GET + "?page=" + currentpage++, QUERY_GET);

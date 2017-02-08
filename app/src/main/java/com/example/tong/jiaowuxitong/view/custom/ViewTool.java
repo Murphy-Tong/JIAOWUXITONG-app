@@ -3,6 +3,7 @@ package com.example.tong.jiaowuxitong.view.custom;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -10,8 +11,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tong.jiaowuxitong.R;
 import com.example.tong.jiaowuxitong.entity.ActionState;
 import com.example.tong.jiaowuxitong.net.GsonUtil;
 import com.example.tong.jiaowuxitong.net.Message;
@@ -25,6 +28,7 @@ public class ViewTool {
 
     /**
      * 处理ActionState 并自动提示
+     *
      * @param context
      * @param message
      * @return 成功的action return 1 否则-1
@@ -45,6 +49,7 @@ public class ViewTool {
 
     /**
      * 设置alertfragment显示的text
+     *
      * @param text
      */
     public static void setmAlertFragmentText(String text) {
@@ -56,6 +61,7 @@ public class ViewTool {
     /**
      * 设置alertfragment error时显示的text
      * 未使用
+     *
      * @param text
      */
     public static void setmAlertFragmentError(String text) {
@@ -69,6 +75,7 @@ public class ViewTool {
 
     /**
      * alertfragment 消失时的回调
+     *
      * @param ondismiss
      */
     public static void setAlertFragmentCallback(AlertFragment.Ondismiss ondismiss) {
@@ -79,10 +86,11 @@ public class ViewTool {
 
     /**
      * 获取alertfragment实例并显示
+     *
      * @param fragmentManager
      * @param context
-     * @param mode 显示模式
-     * @param cancelAble 点击其他地方是否可以取消alert的显示
+     * @param mode            显示模式
+     * @param cancelAble      点击其他地方是否可以取消alert的显示
      * @return
      */
     public static AlertFragment getAlertFragmentInstance(FragmentManager fragmentManager, Context context, int mode, boolean cancelAble) {
@@ -111,6 +119,7 @@ public class ViewTool {
 
     /**
      * 设置alertfragment显示时 是否可以点击界面其他地方以取消alertfragment
+     *
      * @param cancelAble
      */
     public static void setmAlertFragmentCancelAble(boolean cancelAble) {
@@ -132,6 +141,7 @@ public class ViewTool {
 
     /**
      * 显示alertfragment
+     *
      * @param mill alertfragment显示时长     -1 一直显示
      */
     public static void showAlertFragmentText(long mill) {
@@ -147,6 +157,7 @@ public class ViewTool {
 
     /**
      * 显示一个alert 对话框
+     *
      * @param context
      * @param alert
      * @param pButton
@@ -189,26 +200,37 @@ public class ViewTool {
 
     /**
      * 显示一个snackbar
+     *
      * @param context
      * @param recyclerView
      * @param s
      */
-    public static void showSnack(@Nullable Context context, View recyclerView, String s) {
+    public static void showSnack(Context context, View recyclerView, String s) {
         if (!isShowingSnack) {
-            Snackbar.make(recyclerView, s, Snackbar.LENGTH_SHORT)
+            Snackbar snackbar = Snackbar.make(recyclerView, s, Snackbar.LENGTH_SHORT)
                     .setCallback(new Snackbar.Callback() {
                         @Override
                         public void onDismissed(Snackbar snackbar, int event) {
                             super.onDismissed(snackbar, event);
                             isShowingSnack = false;
                         }
-                    })
-                    .show();
+                    });
+            View view = snackbar.getView();
+            if (context != null && view != null) {
+                view.setBackgroundColor(context.getResources().getColor(R.color.snackBarBackground));
+                View v = view.findViewById(android.support.design.R.id.snackbar_text);
+                if (v != null && v instanceof TextView) {
+                    TextView textView = (TextView) v;
+                    textView.setTextColor(context.getResources().getColor(R.color.snackBarTextColor));
+                }
+            }
+            snackbar.show();
         }
     }
 
     /**
      * 显示一个toast
+     *
      * @param context
      * @param s
      * @param lengthShort

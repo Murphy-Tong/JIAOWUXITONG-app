@@ -182,10 +182,11 @@
     <string name="to_see_crs_detail">去查看课程详情?</string>
     <string name="chsed_crs">已选课程</string>
     <string name="dept_thr">部门教师</string>
-    <string name="no_std">no student</string>
+    <string name="no_std">没有学生</string>
     <string name="cls_std">班级学生</string>
-    <string name="no_crs">no course</string>
+    <string name="no_crs">没有课程</string>
     <string name="open_crs">已开课程</string>
     <string name="delete_succ">已删除!</string>
     <string name="action_succ">操作成功!</string>
+    <string name="seems_none">好像没有了...</string>
 </resources>

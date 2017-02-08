@@ -656,7 +656,7 @@ public class ManagerFragment extends BaseFragment {
     private void fillContent(List lvs) {
         pb.setVisibility(View.INVISIBLE);
         if (lvs == null || lvs.size() == 0) {
-            ViewTool.showSnack(null, recyclerView, "好像没有了...");
+            ViewTool.showSnack(mContext, recyclerView, mContext.getString(R.string.seems_none));
         }
         myAdapter.setData(lvs);
     }
