@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 /**
  * Created by TONG on 2017/1/19.
+ * 一个自定义view 未使用
  */
 public class MyChart extends View {
 

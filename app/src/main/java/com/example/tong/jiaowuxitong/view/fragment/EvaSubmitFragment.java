@@ -33,6 +33,7 @@ import de.greenrobot.event.ThreadMode;
 
 /**
  * Created by TONG on 2017/1/16.
+ * 学生评教结果提交页
  */
 @ContentView(R.layout.eva_submit_layout)
 public class EvaSubmitFragment extends BaseFragment {
@@ -59,6 +60,7 @@ public class EvaSubmitFragment extends BaseFragment {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
+            //获取评教总分
             voOpinion = (VOOpinion) bundle.getSerializable("opts");
             if (voOpinion == null) finishAfterTransition();
             float total = 0.0f;
@@ -75,7 +77,7 @@ public class EvaSubmitFragment extends BaseFragment {
             total += voOpinion.getOpt11();
             if (tv != null)
                 tv.setText(String.format(getResources().getString(R.string.your_evaluation_total), total));
-
+            //本地是否有保存评教额外信息
             String s = IOUtil.readString(mContext, OPT_EXTRA, OPT_EXTRA + voOpinion.getStdCrsId());
             if (!TextUtils.isEmpty(s) && et != null) {
                 et.setText(s);
@@ -141,6 +143,9 @@ public class EvaSubmitFragment extends BaseFragment {
 
     private final static String OPT_EXTRA = "OPT_EXTRA";
 
+    /**
+     * 保存评教信息
+     */
     private void writeFile() {
         String s = et.getText().toString().trim();
         if (!TextUtils.isEmpty(s)) {
@@ -150,13 +155,10 @@ public class EvaSubmitFragment extends BaseFragment {
     }
 
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context == null)
-            this.mContext = context;
-    }
-
+    /**
+     * 提交后，处理服务器返回的处理结果
+     * @param msg
+     */
     @Override
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onGet(Message msg) {

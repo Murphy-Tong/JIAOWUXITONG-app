@@ -28,7 +28,7 @@ import com.example.tong.jiaowuxitong.net.NetUtil;
 import com.example.tong.jiaowuxitong.view.LoadingWhat;
 import com.example.tong.jiaowuxitong.view.custom.AnimaTool;
 import com.example.tong.jiaowuxitong.view.custom.ViewTool;
-import com.example.tong.jiaowuxitong.view.views.ManagerAlterStudentActivity;
+import com.example.tong.jiaowuxitong.view.views.ManagerAlterActivity;
 
 import java.io.Serializable;
 
@@ -38,6 +38,8 @@ import okhttp3.Call;
 
 /**
  * Created by TONG on 2017/2/4.
+ * 搜索结果展示页面 根据actionTag 处理点击事件
+ * 部分方法与managerfragment 类似
  */
 public class SearchResultFragment extends BaseFragment {
 
@@ -63,12 +65,9 @@ public class SearchResultFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
+    /**
+     * 正在加载数据时更新界面
+     */
     private void onloading() {
         if (myAdapter != null) {
             myAdapter.clearData();
@@ -79,9 +78,13 @@ public class SearchResultFragment extends BaseFragment {
 
     private Call call;
 
+    /**
+     * 加载数据
+     * @param query
+     */
     public void load(Query query) {
         if (query != null) {
-            if (call != null) {
+            if (call != null) { //取消上一次的call 查询
                 call.cancel();
                 call = null;
             }
@@ -108,7 +111,6 @@ public class SearchResultFragment extends BaseFragment {
     private MyAdapter myAdapter;
     private GridLayoutManager gridLayoutManager;
 
-    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -120,20 +122,21 @@ public class SearchResultFragment extends BaseFragment {
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
                 if (parent.getChildLayoutPosition(view) % 2 == 0) {
-                    outRect.left = 8;
-                    outRect.right = 4;
+                    outRect.left = 5;
+                    outRect.right = 3;
                 } else {
-                    outRect.right = 8;
-                    outRect.left = 4;
+                    outRect.right = 5;
+                    outRect.left = 3;
                 }
-                outRect.top = 5;
-                outRect.bottom = 5;
+                outRect.top = 3;
+                outRect.bottom = 3;
             }
         });
         gridLayoutManager.setSmoothScrollbarEnabled(true);
         gridLayoutManager.setAutoMeasureEnabled(true);
         gridLayoutManager.setMeasurementCacheEnabled(true);
 
+        //滚动时 的回调
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
             private int state;
@@ -150,7 +153,7 @@ public class SearchResultFragment extends BaseFragment {
                 if (scrollCallback != null && (Math.abs(dy) > Math.abs(dx))) {
                     scrollCallback.onScroll(dx, dy);
                 }
-
+                //加载更多数据
                 if (!recyclerView.canScrollVertically(1)) {
                     loadMore();
 
@@ -174,7 +177,7 @@ public class SearchResultFragment extends BaseFragment {
         }
     }
 
-
+    //更换查询关键字 并重新加载
     public void changeKey(Query query) {
         this.query = query;
         currentpage = 1;
@@ -183,6 +186,9 @@ public class SearchResultFragment extends BaseFragment {
     }
 
 
+    /**
+     * 绑定数据
+     */
     private class MyAdapter extends RecyclerView.Adapter {
 
         public MyAdapter() {
@@ -356,7 +362,6 @@ public class SearchResultFragment extends BaseFragment {
         }
 
 
-        //    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         private void handlerClick(final MyHolder myHolder) {
             if (actionTag == LoadingWhat.FORRESULT) {
                 ViewTool.showAlert(mContext, "add this course?", "yes", "no", new ViewTool.CallBack() {
@@ -416,7 +421,7 @@ public class SearchResultFragment extends BaseFragment {
         this.myHolder = myHolder;
 
         if (myHolder != null && myHolder.serializable != null && actionTag != LoadingWhat.FORRESULT && (myHolder.serializable instanceof VOStudent || myHolder.serializable instanceof VOTeacher || myHolder.serializable instanceof VOCourse)) {
-            Intent intent = new Intent(mContext, ManagerAlterStudentActivity.class);
+            Intent intent = new Intent(mContext, ManagerAlterActivity.class);
             intent.putExtra(LoadingWhat.LOADING_WHAT, myHolder.tag);
             intent.putExtra("body", myHolder.serializable);
             startActivityForResult(intent, 1);

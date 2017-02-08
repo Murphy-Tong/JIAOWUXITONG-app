@@ -19,10 +19,11 @@ public class MyApp extends Application {
         super.onCreate();
         x.Ext.init(this);
         x.Ext.setDebug(true);
-        String s = IOUtil.readString(this,"host","host");
+        String s = IOUtil.readString(this,"host","host");//设置之前保存的主机地址
         if(!TextUtils.isEmpty(s)){
             GlobalResource.setHost(s);
         }
+        //获取屏幕宽高
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         GlobalResource.SCREEN_WID = windowManager.getDefaultDisplay().getWidth();
         GlobalResource.SCREEN_HIGH = windowManager.getDefaultDisplay().getHeight();

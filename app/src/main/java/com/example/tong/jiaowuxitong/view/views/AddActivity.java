@@ -39,6 +39,9 @@ import java.io.Serializable;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 
+/**
+ * 管理员添加 数据 页面 根据 LOADINGWHAT 显示不同界面
+ */
 @ContentView(R.layout.activity_add)
 public class AddActivity extends BaseActivity {
 
@@ -121,6 +124,9 @@ public class AddActivity extends BaseActivity {
     private int mTag;
     private VOCourse course;
 
+    /**
+     * 处理intent 确定要显示的界面
+     */
     private void parseIntent() {
         Bundle bundle = getIntent().getBundleExtra("bundle");
         if (bundle != null) {
@@ -166,6 +172,10 @@ public class AddActivity extends BaseActivity {
 
     }
 
+    /**
+     * 处理 注册 按钮点击事件
+     * @param v
+     */
     @Event(type = View.OnClickListener.class, value = {R.id.fab, R.id.add_c_alter_button, R.id.add_t_alter_button})
     private void tryReg(View v) {
         if (v.getId() == R.id.fab) {
@@ -190,7 +200,10 @@ public class AddActivity extends BaseActivity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+
+    /**
+     * 进入选择dept界面
+     */
     private void chooseDept() {
         Intent intent = new Intent(this, ListSelectActivity.class);
         Bundle bundle = new Bundle();
@@ -203,6 +216,9 @@ public class AddActivity extends BaseActivity {
 
     }
 
+    /**
+     * 进入选择teacher界面
+     */
     private void chooseTeacher() {
         Intent intent = new Intent(this, ListSelectActivity.class);
         Bundle bundle = new Bundle();
@@ -216,6 +232,9 @@ public class AddActivity extends BaseActivity {
     }
 
 
+    /**
+     * 检查 添加一个课程
+     */
     private void addCourse() {
         String name = cname.getText().toString().trim();
         cname.setError(null);
@@ -246,6 +265,9 @@ public class AddActivity extends BaseActivity {
 
     }
 
+    /**
+     * 检查添加一个学生
+     */
     private void addStd() {
         String name = sname.getText().toString().trim();
         sname.setError(null);
@@ -295,6 +317,9 @@ public class AddActivity extends BaseActivity {
         NetUtil.asyncPost(GsonUtil.toJson(voStudent), GlobalResource.ADD_STD, ADD_STD);
     }
 
+    /**
+     * 检查添加一个部门
+     */
     private void addDept() {
         dname.setError(null);
         String name = dname.getText().toString().trim();
@@ -310,10 +335,16 @@ public class AddActivity extends BaseActivity {
     }
 
 
+    /**
+     * 添加时显示进度条
+     */
     private void showAlert() {
         ViewTool.getAlertFragmentInstance(getSupportFragmentManager(), this, AlertFragment.MODE_WITH_TEXT, false);
     }
 
+    /**
+     *检查  添加一个teahcer
+     */
     private void addTeacher() {
         String name = tname.getText().toString().trim();
         tname.setError(null);
@@ -370,6 +401,12 @@ public class AddActivity extends BaseActivity {
         NetUtil.asyncPost(GsonUtil.toJson(voTeacher), GlobalResource.ADD_TEACHER, ADD_TEACHER);
     }
 
+    /**
+     * 处理选择结果
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -388,6 +425,10 @@ public class AddActivity extends BaseActivity {
 
     }
 
+    /**
+     * 处理服务器返回的添加 结果信息
+     * @param message
+     */
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onGet(Message message) {
         if (message != null && message.tag == ADD_COURSE) {

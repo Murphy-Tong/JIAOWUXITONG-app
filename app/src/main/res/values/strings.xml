@@ -170,7 +170,7 @@
     <string name="add_dept">添加部门</string>
     <string name="add_thr">添加教师</string>
     <string name="add_std">添加学生</string>
-    <string name="add_crs">add course</string>
+    <string name="add_crs">添加课程</string>
     <string name="pls_choose_thr">请选择一名教师！</string>
     <string name="pls_choose_gender">请选择一个性别!</string>
     <string name="pwd_not_same">密码不一致!</string>
@@ -179,4 +179,13 @@
     <string name="add_fail">添加失败！</string>
     <string name="press_again_to_exit">再按一次退出</string>
     <string name="c_std_not_degree">"还有学生违背打分，去打分!"</string>
+    <string name="to_see_crs_detail">去查看课程详情?</string>
+    <string name="chsed_crs">已选课程</string>
+    <string name="dept_thr">部门教师</string>
+    <string name="no_std">no student</string>
+    <string name="cls_std">班级学生</string>
+    <string name="no_crs">no course</string>
+    <string name="open_crs">已开课程</string>
+    <string name="delete_succ">已删除!</string>
+    <string name="action_succ">操作成功!</string>
 </resources>

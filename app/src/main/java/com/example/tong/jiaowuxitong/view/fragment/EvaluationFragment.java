@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.example.tong.jiaowuxitong.GlobalResource;
 import com.example.tong.jiaowuxitong.R;
-import com.example.tong.jiaowuxitong.TestUtil;
 import com.example.tong.jiaowuxitong.entity.VOEvaluation;
 import com.example.tong.jiaowuxitong.entity.VOOpinion;
 import com.example.tong.jiaowuxitong.entity.VOStdCrs;
@@ -39,6 +38,9 @@ import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 
+/**
+ * 学生评教页
+ */
 public class EvaluationFragment extends BaseFragment {
 
     private OnFragmentInteractionListener mListener;
@@ -55,7 +57,10 @@ public class EvaluationFragment extends BaseFragment {
 
     }
 
-
+    /**
+     * 从本地读取评教条目信息若没有
+     * 从服务器读取
+     */
     private void readFile() {
         String s = IOUtil.readString(mContext, GlobalResource.EVALUATIONS, GlobalResource.EVALUATIONS);
         String tmp[] = IOUtil.readStringSet(mContext, CourseEvaluationActivity.OPTSFILE, CourseEvaluationActivity.EVA_CHOOSE + voStdCrs.getId());
@@ -85,35 +90,39 @@ public class EvaluationFragment extends BaseFragment {
 
     private boolean ever_choose_flag = false;
 
-
+    /**
+     * 学生评价完当前项目后自动滚到下一页
+     *
+     * @param evaluationOption
+     */
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onGet2(EvaluationOption evaluationOption) {
         if (clearFlag) return;
         if (evaluationOption != null) {
-            TestUtil.log("degreechoose:  ", evaluationOption.position + "");
+
             choose[evaluationOption.position] = evaluationOption.choose;
             viewPager.setCurrentItem(evaluationOption.position + 1, true);
-//            if (!ever_choose_flag) {
-            viewPager.setMaxScrollablePosition(evaluationOption.position + 1);
-//            } else {
-//                viewPager.setMaxScrollablePosition(opts.size());
-//            }
 
+            //设置viewpager的最大可滑动范围+1
+            viewPager.setMaxScrollablePosition(evaluationOption.position + 1);
+            //改变标题指示
             if (menuItem != null) {
                 menuItem.setTitle(String.format(mContext.getResources().getString(R.string.eva_c), (evaluationOption.position + 1), opts.size()));
             }
 
-
+            //如果全部都评价完成 处理评价选择结构 进去下一页
             if (reviewFlag || evaluationOption.position == opts.size() - 1) {
 
                 if (choose.length != 11) {
                     return;
                 }
+                //检查是否还有漏网之鱼
                 int c = checkChoose();
-
                 if (c == -1 && !submit) {
+                    //没有 处理结果 进去下一页
                     parseResult();
                 } else {
+                    //若有 滚过去
                     reviewFlag = true;
                     viewPager.setCurrentItem(c, true);
                 }
@@ -123,6 +132,9 @@ public class EvaluationFragment extends BaseFragment {
 
     private boolean reviewFlag = false;
 
+    /**
+     * 处理评教选择结果
+     */
     private void parseResult() {
 
 //        IOUtil.writeStringSet(mContext, choose, CourseEvaluationActivity.OPTSFILE, CourseEvaluationActivity.EVA_CHOOSE + voStdCrs.getId(), null);
@@ -145,19 +157,32 @@ public class EvaluationFragment extends BaseFragment {
         Message msg = new Message();
         msg.tag = CourseEvaluationActivity.CHANGE_CONTENT_TAG;
         msg.msg = voOpinion;
+        //发送信息给父activity 进入下一页
         EventBus.getDefault().post(msg);
     }
 
 
+    /**
+     * 本地没有评教项目信息是 从服务器获取
+     *
+     * @param msg
+     */
     @Override
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onGet(Message msg) {
         if (msg.tag == Message.EVA) {
             IOUtil.writeString(mContext, (String) msg.msg, GlobalResource.EVALUATIONS, GlobalResource.EVALUATIONS, null);
+            //获取完成 处理
             parseContent(msg, null);
         }
     }
 
+    /**
+     * 填充页面
+     *
+     * @param msg
+     * @param tmp
+     */
     private void parseContent(Message msg, @Nullable String[] tmp) {
         Type type = new TypeToken<List<VOEvaluation>>() {
         }.getType();
@@ -172,13 +197,14 @@ public class EvaluationFragment extends BaseFragment {
             totals.add(String.valueOf(evaluation.getTotal()));
         }
 
+        //处理标题指示
         menuItem.setTitle(String.format(mContext.getResources().getString(R.string.eva_c), tmp == null ? 0 : tmp.length, opts.size()));
         if (tmp != null) {
             if (tmp.length == opts.size()) {
                 submit = true;
                 menuItem.setTitle(R.string.submit);
             }
-
+            //设置最大滑动范围
             viewPager.setMaxScrollablePosition(tmp.length);
 
             if (tmp.length > totals.size()) {
@@ -194,9 +220,11 @@ public class EvaluationFragment extends BaseFragment {
             choose = new String[totals.size()];
         }
 
+        //与父activity 公用一个choose引用以便保存
         CourseEvaluationActivity.choose = this.choose;
+        //初始化viewpager
         pageViewAdapter = new PageViewAdapter(viewPager, mContext, opts, totals, choose, menuItem);
-        if (tmp != null) {
+        if (tmp != null) {//不是第一次评教（之前有保存的信息）
             viewPager.setCurrentItem(tmp.length, true);
             viewPager.setMaxScrollablePosition(tmp.length);
         }
@@ -209,7 +237,7 @@ public class EvaluationFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         voStdCrs = (VOStdCrs) getArguments().getSerializable("obj");
-
+        //fragment 中需要设置这个来填充自己的菜单
         setHasOptionsMenu(true);
 
     }
@@ -241,17 +269,18 @@ public class EvaluationFragment extends BaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //处理submit点击事件
         if (item.getItemId() == R.id.eva_title) {
-            int canSubmit = checkChoose();
-            if (canSubmit == -1) {
+            int canSubmit = checkChoose();//检查是否可以提交
+            if (canSubmit == -1) {//可以提交
 //            changeContent(null);
                 parseResult();
                 return true;
-            } else {
+            } else {//还不能 滚过去
                 viewPager.setCurrentItem(canSubmit, true);
                 return super.onOptionsItemSelected(item);
             }
-        } else if (item.getItemId() == R.id.eva_clear) {
+        } else if (item.getItemId() == R.id.eva_clear) {//处理清空事件
             clearChoose();
             return true;
         }
@@ -262,6 +291,9 @@ public class EvaluationFragment extends BaseFragment {
 
     private boolean clearFlag = false;
 
+    /**
+     * 清空选项
+     */
     private void clearChoose() {
         for (int i = 0; i < choose.length; i++) {
             choose[i] = null;
@@ -307,6 +339,9 @@ public class EvaluationFragment extends BaseFragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * viewpager 适配器
+     */
     private static class PageViewAdapter extends PagerAdapter implements ViewPager.OnPageChangeListener {
 
         private List<View> lv;
@@ -416,7 +451,7 @@ public class EvaluationFragment extends BaseFragment {
         private MenuItem menuItem;
 
         public PageViewAdapter(ViewPager viewPager, Context context, ArrayList<String> cs, ArrayList<String> totals, String[] degrees, MenuItem menu) {
-
+            //初始化viewpager 和 view list
             this.context = context;
             lv = new ArrayList<>(totals.size());
             for (int i = 0; i < totals.size(); i++) {

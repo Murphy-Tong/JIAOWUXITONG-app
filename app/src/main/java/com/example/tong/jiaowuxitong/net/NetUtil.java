@@ -20,6 +20,7 @@ import okhttp3.Response;
 
 /**
  * Created by TONG on 2017/1/5.
+ * 封装了okhttp的服务器访问类
  */
 public class NetUtil {
 
@@ -34,49 +35,20 @@ public class NetUtil {
         return actionState.tag;
     }
 
+    //http body json 数据设置 GBK编码
     private static final String JSONBODYTYPE = "application/json;charset=GBK";
-
-    public static String login(Object user) {
-        checkHost();
-
-        if (user == null) {
-            return null;
-        }
-
-        Gson gson = new Gson();
-        String s = gson.toJson(user);
-
-        OkHttpClient client = new OkHttpClient();
-
-        MediaType mediaType = MediaType.parse(JSONBODYTYPE);
-        RequestBody requestBody = RequestBody.create(mediaType, s);
-
-        try {
-            Request request = new Request.Builder().url("http://localhost:10010/myapp/login")
-                    .post
-                            (requestBody).build();
-            Response response = client.newCall(request).execute();
-            if (response.isSuccessful()) {
-                String ss = new String(response.body().bytes(), "GBK");
-                return ss;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        return null;
-    }
-
-    private static void checkHost() {
-
-
-    }
 
     public static void asyncPost(String url, final int tag) {
         asyncPost(null, url, tag, -1);
     }
 
+    /**
+     * 异步请求数据
+     * @param jbody
+     * @param url
+     * @param tag
+     * @return
+     */
     public static Call asyncPost(String jbody, String url, final int tag) {
         return asyncPost(jbody, url, tag, -1);
     }
@@ -85,8 +57,15 @@ public class NetUtil {
         void onPost();
     }
 
+    /**
+     * 异步请求网络url
+     * @param jbody body数据
+     * @param url 访问地址
+     * @param tag 回调标识
+     * @param extra 回调额外信息
+     * @return 返回此次请求的call 以便取消
+     */
     public static Call asyncPost(String jbody, String url, final int tag, final int extra) {
-        Log.i("url", url);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(10000, TimeUnit.MILLISECONDS);
@@ -109,21 +88,31 @@ public class NetUtil {
             }
             call = client.newCall(request);
             call.enqueue(new Callback() {
+                /**
+                 * 处理失败
+                 * @param call
+                 * @param e
+                 */
                 @Override
                 public void onFailure(Call call, IOException e) {
                     String ss = e.toString();
-                    TestUtil.print(ss);
+
                     Message message = new Message();
                     message.msg = ss;
                     message.tag = Message.FAILED_TAG;
                     EventBus.getDefault().post(message);
                 }
 
+                /**
+                 * 处理成功
+                 * @param call
+                 * @param response
+                 * @throws IOException
+                 */
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         String ss = new String(response.body().bytes(), "GBK");
-                        TestUtil.print(ss);
 
                         Message message = new Message();
                         message.msg = ss;

@@ -22,8 +22,10 @@ import de.greenrobot.event.ThreadMode;
 
 /**
  * Created by TONG on 2017/2/2.
+ * fragment 基类 用于自动处理过长动画以及 EVENTBUS 的状态绑定
  */
 public class BaseFragment extends Fragment {
+    //是否需要注册eventbus 需要在super.oncreate()之前设置
     protected boolean registEventbus = true;
     protected Context mContext;
     protected Activity mActivity;
@@ -33,6 +35,7 @@ public class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.mContext = getContext();
         mActivity = getActivity();
+        //检查版本 设置动画
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setAllowReturnTransitionOverlap(false);
             setAllowEnterTransitionOverlap(false);
@@ -49,6 +52,11 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * 检查版本 自动开启动画
+     * @param intent
+     * @param requestCode
+     */
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -58,6 +66,10 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * 同上
+     * @param intent
+     */
     @Override
     public void startActivity(Intent intent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -67,6 +79,16 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * 同上
+     */
+    public void finishAfterTransition() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().finishAfterTransition();
+        } else {
+            getActivity().finish();
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -92,18 +114,12 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * eventbus 数据回调方法
+     * @param message
+     */
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onGet(Message message) {
     }
-
-    public void finishAfterTransition() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().finishAfterTransition();
-        } else {
-            getActivity().finish();
-        }
-
-    }
-
 
 }

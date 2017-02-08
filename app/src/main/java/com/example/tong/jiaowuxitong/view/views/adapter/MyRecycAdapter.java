@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.example.tong.jiaowuxitong.GlobalResource;
 import com.example.tong.jiaowuxitong.R;
-import com.example.tong.jiaowuxitong.TestUtil;
 import com.example.tong.jiaowuxitong.entity.ActionState;
 import com.example.tong.jiaowuxitong.entity.VOStdCrs;
 import com.example.tong.jiaowuxitong.net.GsonUtil;
@@ -33,6 +32,7 @@ import de.greenrobot.event.ThreadMode;
 
 /**
  * Created by TONG on 2017/1/22.
+ * 教师为学生输入成绩界面的 adapter
  */
 public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -58,15 +58,20 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
-    private ArrayList<VOStdCrs> datas;
-    private ArrayList<Integer> dDatas;
-    private ArrayList<Integer> subedDatas;
-    private ArrayList<Integer> subingDatas;
+    private ArrayList<VOStdCrs> datas;//全部数据
+    private ArrayList<Integer> dDatas;//选择提交的列表
+    private ArrayList<Integer> subedDatas;//已提交列表
+    private ArrayList<Integer> subingDatas;//正在提交列表
 
 //    public ArrayList<VOStdCrs> getdDatas() {
 //        return dDatas;
 //    }
 
+    /**
+     * 设置数据并初始化
+     *
+     * @param datas
+     */
     public void setDatas(ArrayList<VOStdCrs> datas) {
         if (datas == null || datas.size() == 0) return;
         this.datas = datas;
@@ -86,6 +91,7 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return new MyHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final MyHolder myHolder = (MyHolder) holder;
@@ -96,7 +102,7 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final VOStdCrs voStdCrs = datas.get(position);
             myHolder.name.setText(voStdCrs.getStudentName());
             myHolder.id.setText(String.format(context.getResources().getString(R.string.number), voStdCrs.getStudentId()));
-
+            //不在已提交列表中 （未提交或提交中）
             if (!subedDatas.contains(position)) {
                 if (voStdCrs.getDegree() < 0) {
                     myHolder.editText.setText(null);
@@ -107,12 +113,12 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 myHolder.pb.setVisibility(View.INVISIBLE);
                 myHolder.editText.setEnabled(true);
                 myHolder.ok.setVisibility(View.INVISIBLE);
-            } else {
+            } else { // 提交过得数据
                 myHolder.editText.setText(String.valueOf(voStdCrs.getDegree()));
                 myHolder.editText.setEnabled(false);
                 myHolder.ok.setVisibility(View.VISIBLE);
             }
-
+            //正在提交的数据
             if (subingDatas.contains(position)) {
                 myHolder.pb.setVisibility(View.VISIBLE);
                 myHolder.ok.setVisibility(View.INVISIBLE);
@@ -124,6 +130,12 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
 
+    /**
+     * 返回选课信息的id
+     *
+     * @param position
+     * @return
+     */
     @Override
     public long getItemId(int position) {
         return datas.get(position).getId();
@@ -145,11 +157,12 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private boolean hasCalled = false;
-    private int ddSize = 0;
-
 
     private boolean isSubmiting = false;
 
+    /**
+     * 之前未提交或已提交但还没有完成   则 开始提交
+     */
     public void doSubmit() {
         if (!isSubmiting) {
             isSubmiting = true;
@@ -161,29 +174,24 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void doSubmit(Message msg) {
-        if ((msg != null && msg.tag == SUBMIT_TAG)) {
+        if ((msg != null && msg.tag == SUBMIT_TAG)) { // 处理服务器返回的提交结果信息
             if (msg != null && msg.tag == SUBMIT_TAG) {
                 if (msg.msg != null) {
-                    TestUtil.log("msg", (String) msg.msg);
                     int tmp = msg.extra;
                     ActionState as = GsonUtil.fromJson((String) msg.msg, ActionState.class);
-                    if (as.tag == ActionState.ACTION_SUCCESS) {
-                        time++;
-                        subingDatas.remove(new Integer(dDatas.get(tmp)));
-                        subedDatas.add(dDatas.get(tmp));
-
-                        notifyItemChanged(dDatas.get(tmp));
-
-
-                        if (time == dDatas.size()) {
-                            isSubmiting = false;
-                            if (onFinish != null)
+                    if (as.tag == ActionState.ACTION_SUCCESS) {//提交成功
+                        time++;//成功次数++
+                        subingDatas.remove(new Integer(dDatas.get(tmp)));//从正在提交列表中移除
+                        subedDatas.add(dDatas.get(tmp));//加入一提交列表
+                        notifyItemChanged(dDatas.get(tmp));//更新状态
+                        if (time == dDatas.size()) {//选择的item全部提交完
+                            isSubmiting = false;//
+                            if (onFinish != null)//两个回调
                                 onFinish.onFinish();
                             if (backFinish != null)
                                 backFinish.onFinish();
                         }
-                        if (time == datas.size()) {
-
+                        if (time == datas.size()) {//全部的item都提交完成
                             isSubmiting = false;
                             if (onFinish != null)
                                 onFinish.onAllSubmit();
@@ -191,13 +199,12 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
             }
-            if (dDatas.size() > position) {
-                TestUtil.log("update", position + "");
+            if (dDatas.size() > position) {//还有待提交数据  提交
                 subingDatas.add(dDatas.get(position));
                 notifyItemChanged(dDatas.get(position));
                 NetUtil.asyncPost(GsonUtil.toJson(datas.get(dDatas.get(position))), submitUrl, SUBMIT_TAG, position++);
             }
-            if (time == dDatas.size() && onFinish != null && !hasCalled) {
+            if (time == dDatas.size() && onFinish != null && !hasCalled) {//选择的已经提交完
                 isSubmiting = false;
                 hasCalled = true;
                 onFinish.onFinish();
@@ -211,6 +218,7 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private OnFinish backFinish;
 
+    //activity onbackpress 时调用 获取 提交状态
     public void requestBackForce(OnFinish onFinish) {
         if (onFinish == null) return;
         if (!subingDatas.isEmpty()) {
@@ -220,6 +228,7 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             onFinish.onAllSubmit();
         }
     }
+
 
     public class MyHolder extends RecyclerView.ViewHolder {
 
@@ -246,6 +255,7 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 id = (TextView) view.findViewById(R.id.number);
                 editText = (EditText) view.findViewById(R.id.ed_degree);
 
+                //输入的成绩改变时 跟新3个列表
                 editText.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {

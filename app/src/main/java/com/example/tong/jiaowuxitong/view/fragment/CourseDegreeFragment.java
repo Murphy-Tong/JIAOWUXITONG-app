@@ -39,12 +39,13 @@ import de.greenrobot.event.ThreadMode;
 
 import static java.util.Arrays.sort;
 
-
+/**
+ * 含有3个barchartfragment的fragment 用于展示教师课程信息
+ */
 public class CourseDegreeFragment extends BaseFragment {
 
 
     private static final int UPDATE = 155;
-    private BarChartFragment chartFragment3;
 
     public CourseDegreeFragment() {
         // Required empty public constructor
@@ -63,6 +64,7 @@ public class CourseDegreeFragment extends BaseFragment {
 
     private BarChartFragment chartFragment1;
     private BarChartFragment chartFragment2;
+    private BarChartFragment chartFragment3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,6 +84,7 @@ public class CourseDegreeFragment extends BaseFragment {
         com.example.tong.jiaowuxitong.TestUtil.log("onViewCreated", "onViewCreated");
 //        progressBar.setVisibility(View.VISIBLE);
 //        mChart.setVisibility(View.INVISIBLE);
+        //初始化 barhartfragment
         chartFragment1 = (BarChartFragment) Fragment.instantiate(mContext, BarChartFragment.class.getName());
         chartFragment2 = (BarChartFragment) Fragment.instantiate(mContext, BarChartFragment.class.getName());
         chartFragment3 = (BarChartFragment) Fragment.instantiate(mContext, BarChartFragment.class.getName());
@@ -92,10 +95,14 @@ public class CourseDegreeFragment extends BaseFragment {
         transaction.add(R.id.container3, chartFragment3, "thrid");
         transaction.commit();
         initBarChart();
+        //请求数据
         NetUtil.asyncPost(GsonUtil.toJson(voCourse), GlobalResource.FIND_COURSE, UPDATE);
         NetUtil.asyncPost(GsonUtil.toJson(voCourse), GlobalResource.GET_DEGREE_EVA_OF_COURSE, COURSE_EVA);
     }
 
+    /**
+     * 出事话barchart
+     */
     private void initBarChart() {
         IAxisValueFormatter iax = new CourseDegreeIXAxisValueFormat();
         IAxisValueFormatter iay = new CourseDegreeIYAxisValueFormat();
@@ -107,6 +114,10 @@ public class CourseDegreeFragment extends BaseFragment {
 
     private static final int COURSE_EVA = 996;
 
+    /**
+     * 处理服务器数据
+     * @param msg
+     */
     @Override
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onGet(Message msg) {

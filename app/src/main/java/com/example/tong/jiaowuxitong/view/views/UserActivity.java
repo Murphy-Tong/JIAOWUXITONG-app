@@ -17,20 +17,19 @@ import com.example.tong.jiaowuxitong.entity.VOCourse;
 import com.example.tong.jiaowuxitong.entity.VOStdCrs;
 import com.example.tong.jiaowuxitong.entity.VOUser;
 import com.example.tong.jiaowuxitong.net.GsonUtil;
-import com.example.tong.jiaowuxitong.net.Message;
 import com.example.tong.jiaowuxitong.view.custom.ViewTool;
 import com.example.tong.jiaowuxitong.view.fragment.CourseDegreeChartDiolagFragment;
 import com.example.tong.jiaowuxitong.view.fragment.CourseDetailFragment;
+import com.example.tong.jiaowuxitong.view.fragment.UserFragment;
 import com.example.tong.jiaowuxitong.view.fragment.adapter.OnListFragmentInteractionListener;
-import com.example.tong.jiaowuxitong.view.fragment.StudentFragment;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import de.greenrobot.event.Subscribe;
-import de.greenrobot.event.ThreadMode;
-
+/**
+ * 学生 和 教师 主界面 根据userTag
+ */
 @ContentView(value = R.layout.activity_user)
 public class UserActivity extends BaseActivity implements OnListFragmentInteractionListener {
 
@@ -69,14 +68,6 @@ public class UserActivity extends BaseActivity implements OnListFragmentInteract
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MainThread)
-    public void changeTitle(Message msg) {
-     /*   if (msg != null && msg.tag == Message.CHANGE_TITLE) {
-            getSupportActionBar().setTitle(msg.msg);
-            userStr = msg.msg;
-        }
-*/
-    }
 
     private int tag;
 
@@ -87,7 +78,7 @@ public class UserActivity extends BaseActivity implements OnListFragmentInteract
 //                currFragment = TeacherFragment.instantiate(this, TeacherFragment.class.getName(), bundle);
 //                break;
 //            case VOUser.STUDENT_TAG:
-        currFragment = StudentFragment.instantiate(this, StudentFragment.class.getName(), bundle);
+        currFragment = UserFragment.instantiate(this, UserFragment.class.getName(), bundle);
 //                break;
 //            case VOUser.MANAGER_TAG:
 //                currFragment = ManagerFragment.instantiate(this, ManagerFragment.class.getName(), bundle);
@@ -96,43 +87,44 @@ public class UserActivity extends BaseActivity implements OnListFragmentInteract
         getSupportFragmentManager().beginTransaction().add(R.id.container, currFragment).commit();
     }
 
-    @Override
-    @Subscribe(threadMode = ThreadMode.MainThread)
-    public void onGet(Message msg) {
-        if (msg != null && msg.tag == Message.NOTIFYCHANGED) {
-            VOStdCrs voStdCrs = (VOStdCrs) msg.msg;
-
-        }
-    }
-
 
     @Override
     public void onListFragmentInteraction(Object o, View view) {
-        if (user.getTAG() == VOUser.STUDENT_TAG && o instanceof VOStdCrs) {
+        if (user.getTAG() == VOUser.STUDENT_TAG && o instanceof VOStdCrs) {//当前是学生界面
             VOStdCrs voStdCrs = (VOStdCrs) o;
-            if (voStdCrs.getEvaDegree() <= 0) {
-                evaluateStdCrs(voStdCrs);
+            if (voStdCrs.getEvaDegree() <= 0) {//评教成绩<0 （未评教）
+                evaluateStdCrs(voStdCrs);//去评教
             } else {
-                StdCrsDetail(voStdCrs, view);
+                StdCrsDetail(voStdCrs, view);//查看成绩
             }
 
-        } else if (user.getTAG() == VOUser.TEACHER_TAG && o instanceof VOCourse) {
+        } else if (user.getTAG() == VOUser.TEACHER_TAG && o instanceof VOCourse) {//当前是教师界面
             VOCourse voCourse = (VOCourse) o;
-            if (voCourse.getUnDegreeStudentCount() > 0) {
-                degreeStudent(voCourse);
+            if (voCourse.getUnDegreeStudentCount() > 0) {//还有未给成绩学生
+                degreeStudent(voCourse);//去打分
             } else {
-                courseDetail(voCourse);
+                courseDetail(voCourse);//去查看课程详情
             }
         }
 
     }
 
+    /**
+     * 去查看课程详情
+     *
+     * @param voCourse
+     */
     private void courseDetail(VOCourse voCourse) {
         Intent intent = new Intent(this, CourseDetailActivity.class);
         intent.putExtra("course", voCourse);
         startActivity(intent);
     }
 
+    /**
+     * 去未学生打分
+     *
+     * @param voCourse
+     */
     private void degreeStudent(final VOCourse voCourse) {
         ViewTool.showAlert(this, voCourse.getUnDegreeStudentCount() + getString(R.string.degree_std_alert), getString(R.string.yes_button_text), getString(R.string.no_button_text), new ViewTool.CallBack() {
             @Override
@@ -144,6 +136,12 @@ public class UserActivity extends BaseActivity implements OnListFragmentInteract
         });
     }
 
+    /**
+     * 学生查看成绩
+     *
+     * @param voStdCrs
+     * @param view
+     */
     private void StdCrsDetail(VOStdCrs voStdCrs, View view) {
 
         Bundle bundle = new Bundle();
@@ -173,6 +171,11 @@ public class UserActivity extends BaseActivity implements OnListFragmentInteract
     }
 
 
+    /**
+     * 前往评教
+     *
+     * @param voStdCrs
+     */
     private void evaluateStdCrs(final VOStdCrs voStdCrs) {
         ViewTool.showAlert(this, getString(R.string.eva_course_alert), getString(R.string.yes_button_text), getString(R.string.no_button_text), new ViewTool.CallBack() {
             @Override
@@ -184,8 +187,12 @@ public class UserActivity extends BaseActivity implements OnListFragmentInteract
         });
     }
 
+    /**
+     * 改变当前的fragment
+     *
+     * @param crsId
+     */
     private void changeContent(int crsId) {
-
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.hide(currFragment);
@@ -208,6 +215,9 @@ public class UserActivity extends BaseActivity implements OnListFragmentInteract
     };
     private boolean finish = false;
 
+    /**
+     * 此方法以抽取到BaseActivity
+     */
     @Override
     public void onBackPressed() {
         if (finish) {

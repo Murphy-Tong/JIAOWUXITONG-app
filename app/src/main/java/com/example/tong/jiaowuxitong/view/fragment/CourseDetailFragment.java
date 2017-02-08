@@ -25,6 +25,7 @@ import de.greenrobot.event.ThreadMode;
 
 /**
  * Created by TONG on 2017/1/8.
+ * 课程详情页  并没有使用
  */
 public class CourseDetailFragment extends BaseFragment {
     private static CourseDetailFragment courseDetailFragment = new CourseDetailFragment();
@@ -40,6 +41,10 @@ public class CourseDetailFragment extends BaseFragment {
         return courseDetailFragment;
     }
 
+    /**
+     * 获取USER_TAG
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

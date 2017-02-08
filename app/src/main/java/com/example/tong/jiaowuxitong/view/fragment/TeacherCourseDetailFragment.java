@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import com.example.tong.jiaowuxitong.R;
 import com.example.tong.jiaowuxitong.entity.VOCourse;
 
-
+/**
+ * 教师课程详情页面
+ */
 public class TeacherCourseDetailFragment extends BaseFragment {
     private ViewPager viewPager;
     private VOCourse course;
@@ -55,6 +57,9 @@ public class TeacherCourseDetailFragment extends BaseFragment {
         new PageAdapter(getChildFragmentManager(), viewPager, tabLayout);
     }
 
+    /**
+     * viewpager adapter
+     */
     private class PageAdapter extends FragmentPagerAdapter {
         private String titles[] = new String[]{"评教结果", "课程成绩"};
         private Fragment[] fragments = new Fragment[2];

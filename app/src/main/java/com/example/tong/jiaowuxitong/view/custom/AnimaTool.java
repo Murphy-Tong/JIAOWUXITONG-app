@@ -14,10 +14,17 @@ import android.view.animation.RotateAnimation;
 public class AnimaTool {
     public interface OnAnimate {
         void onUpdate(float f);
-
         void onEnd();
     }
 
+    /**
+     * 旋转动画
+     * @param view
+     * @param onAnimate 回调接口
+     * @param f 开始角度
+     * @param t 最终角度
+     * @param d 持续时间
+     */
     public static void Objrotate(final View view, final OnAnimate onAnimate, float f, float t,int d) {
         ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(view, "rotationX", f, t);
 
@@ -60,6 +67,7 @@ public class AnimaTool {
         objectAnimator.start();
 
     }
+
 
     public static void rotate(Context context, View view, float angle) {
         RotateAnimation rotateAnimation = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);

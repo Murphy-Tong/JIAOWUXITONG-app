@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/recycler_container"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.tong.jiaowuxitong.view.fragment.StudentFragment">
+    tools:context=".view.fragment.UserFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"

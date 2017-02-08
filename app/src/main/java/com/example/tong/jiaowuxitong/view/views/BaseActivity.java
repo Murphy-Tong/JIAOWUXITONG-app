@@ -19,13 +19,20 @@ import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 
+/**
+ * 用于处理动画和eventBus的activity 基类
+ */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    //是否需要注册eventbus 需要在super.onCreate之前设置
     protected boolean registEventbus = true;
     /*   protected boolean setShareEnter = false;
        protected boolean setShareExit = false;*/
+    //是否需要enter动画 需要在super.onCreate之前设置
     protected boolean setEnter = true;
+    //是否需要exit动画 需要在super.onCreate之前设置
     protected boolean setExit = true;
+    //动画时长
     private long during = 400;
 
     @Override
@@ -45,6 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    //由子类调用的 用来初始化toolbar 和title
     protected void setUpToorBar(@Nullable String add) {
         if (getSupportActionBar() != null) {
 //            getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -66,6 +74,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 */
 
+    /**
+     * shareElement的进入动画
+     */
     protected void setShareEnter() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ChangeBounds changeClipBounds = new ChangeBounds();
@@ -88,6 +99,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * shareElement的退出动画
+     */
     protected void setShareExit() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ChangeBounds changeClipBounds = new ChangeBounds();
@@ -108,7 +122,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * 预处理toolbar返回按钮
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -148,6 +166,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onGet(Message message) {
     }
 
+    /**
+     * 自动添加动画
+     * @param intent
+     * @param requestCode
+     */
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -157,6 +180,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 自动添加动画
+     * @param intent
+     */
     @Override
     public void startActivity(Intent intent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

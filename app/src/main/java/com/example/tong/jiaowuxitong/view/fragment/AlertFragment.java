@@ -23,6 +23,7 @@ import com.example.tong.jiaowuxitong.R;
 
 /**
  * Created by TONG on 2017/2/1.
+ * 自定义的dialogfragment
  */
 public class AlertFragment extends DialogFragment {
 
@@ -61,6 +62,9 @@ public class AlertFragment extends DialogFragment {
         this.mMode = mode;
     }
 
+    /**
+     * 展示动画
+     */
     public void showText() {
 
         if (!TextUtils.isEmpty(text)) {

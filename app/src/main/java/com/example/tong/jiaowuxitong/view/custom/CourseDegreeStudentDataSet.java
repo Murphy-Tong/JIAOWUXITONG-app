@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Created by TONG on 2017/1/26.
+ * 学生成绩barchart数据封装
  */
 public class CourseDegreeStudentDataSet {
     private ArrayList<BarEntry> le;

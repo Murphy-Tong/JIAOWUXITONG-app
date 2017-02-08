@@ -45,6 +45,7 @@ import de.greenrobot.event.ThreadMode;
 
 /**
  * Created by TONG on 2017/1/22.
+ * 用dialog显示的学生成绩页面 （不好用） 动画有问题
  */
 public class CourseDegreeChartDiolagFragment extends DialogFragment {
 
@@ -91,7 +92,6 @@ public class CourseDegreeChartDiolagFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        com.example.tong.jiaowuxitong.TestUtil.log("resume","res");
         if(!EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().register(this);
         }
@@ -100,7 +100,6 @@ public class CourseDegreeChartDiolagFragment extends DialogFragment {
     @Override
     public void onStop() {
         super.onStop();
-        com.example.tong.jiaowuxitong.TestUtil.log("stop","stop");
         if(EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().unregister(this);
         }
@@ -111,7 +110,6 @@ public class CourseDegreeChartDiolagFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        com.example.tong.jiaowuxitong.TestUtil.log("onViewCreated","onViewCreated");
         progressBar.setVisibility(View.VISIBLE);
         mChart.setVisibility(View.INVISIBLE);
         EventBus.getDefault().register(this);

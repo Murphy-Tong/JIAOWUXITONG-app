@@ -9,6 +9,7 @@ import com.example.tong.jiaowuxitong.TestUtil;
 
 /**
  * Created by TONG on 2017/1/16.
+ * 学生评教削面使用的viewpager 处理滑动状态
  */
 public class MyViewPager extends ViewPager {
     public MyViewPager(Context context, AttributeSet attrs) {
@@ -22,14 +23,13 @@ public class MyViewPager extends ViewPager {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        int currentPosition = getCurrentItem();
+        int currentPosition = getCurrentItem();//获取当前position，若< 最大可滑动position 不做处理 ，否则 禁止向右滑动
         if (currentPosition < maxScrollablePosition) return super.onTouchEvent(ev);
 
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 x = (int) ev.getX();
                 y = (int) ev.getY();
-//                TestUtil.log("scrolld:", x + " : " + y);
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -42,17 +42,16 @@ public class MyViewPager extends ViewPager {
                 if (disX > disY && x2 - x < 0) {
                     x = x2;
                     y = y2;
-                    TestUtil.log("unhandle:", "x :" + disX);
                     return true;
                 } else {
                     x = x2;
                     y = y2;
-                    TestUtil.log("handle:", "y :" + disY);
                     return super.onTouchEvent(ev);
                 }
         }
         return super.onTouchEvent(ev);
     }
+
 
     public void setMaxScrollablePosition(int position) {
         if (position > maxScrollablePosition)

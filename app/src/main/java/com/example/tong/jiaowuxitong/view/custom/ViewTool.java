@@ -18,15 +18,17 @@ import com.example.tong.jiaowuxitong.net.Message;
 import com.example.tong.jiaowuxitong.view.fragment.AlertFragment;
 
 /**
- * Created by TONG on 2017/1/21.
+ * Created by TONG on 2017/1/21
+ * alter dialog 封装类.
  */
 public class ViewTool {
 
-    public static void showActionResultWindow(Context context, boolean flag) {
-
-
-    }
-
+    /**
+     * 处理ActionState 并自动提示
+     * @param context
+     * @param message
+     * @return 成功的action return 1 否则-1
+     */
     public static int handlerAction(Context context, Message message) {
         if (message == null || message.msg == null || TextUtils.isEmpty((String) message.msg)) {
             Toast.makeText(context, "error empty msg", Toast.LENGTH_SHORT).show();
@@ -40,12 +42,22 @@ public class ViewTool {
         return -1;
     }
 
+
+    /**
+     * 设置alertfragment显示的text
+     * @param text
+     */
     public static void setmAlertFragmentText(String text) {
         if (mAlertFragment != null) {
             mAlertFragment.setText(text);
         }
     }
 
+    /**
+     * 设置alertfragment error时显示的text
+     * 未使用
+     * @param text
+     */
     public static void setmAlertFragmentError(String text) {
         if (mAlertFragment != null) {
             mAlertFragment.setError();
@@ -55,12 +67,24 @@ public class ViewTool {
 
     private static AlertFragment mAlertFragment;
 
+    /**
+     * alertfragment 消失时的回调
+     * @param ondismiss
+     */
     public static void setAlertFragmentCallback(AlertFragment.Ondismiss ondismiss) {
         if (mAlertFragment != null) {
             mAlertFragment.setOndismiss(ondismiss);
         }
     }
 
+    /**
+     * 获取alertfragment实例并显示
+     * @param fragmentManager
+     * @param context
+     * @param mode 显示模式
+     * @param cancelAble 点击其他地方是否可以取消alert的显示
+     * @return
+     */
     public static AlertFragment getAlertFragmentInstance(FragmentManager fragmentManager, Context context, int mode, boolean cancelAble) {
         if (mAlertFragment != null) {
             mAlertFragment.setMode(mode);
@@ -75,6 +99,9 @@ public class ViewTool {
         return mAlertFragment;
     }
 
+    /**
+     * 使alertfragment消失
+     */
     public static void dismissAlertFragment() {
         if (mAlertFragment != null && mAlertFragment.isVisible()) {
             mAlertFragment.dismiss();
@@ -82,17 +109,16 @@ public class ViewTool {
         }
     }
 
+    /**
+     * 设置alertfragment显示时 是否可以点击界面其他地方以取消alertfragment
+     * @param cancelAble
+     */
     public static void setmAlertFragmentCancelAble(boolean cancelAble) {
         if (mAlertFragment != null) {
             mAlertFragment.setCancelable(cancelAble);
         }
     }
 
-
-    public static void setmAlertFragmentOnPositiveListenr() {
-
-
-    }
 
     private static Handler handler = new Handler() {
         @Override
@@ -104,16 +130,30 @@ public class ViewTool {
         }
     };
 
+    /**
+     * 显示alertfragment
+     * @param mill alertfragment显示时长     -1 一直显示
+     */
     public static void showAlertFragmentText(long mill) {
         if (mAlertFragment != null) {
             mAlertFragment.showText();
 
             if (mill != -1) {
+                //延时 mill 毫秒使alertfragment消失
                 handler.sendEmptyMessageDelayed(110, mill);
             }
         }
     }
 
+    /**
+     * 显示一个alert 对话框
+     * @param context
+     * @param alert
+     * @param pButton
+     * @param nButton
+     * @param callBack
+     * @param canTouch
+     */
     public static void showAlert(Context context, String alert, String pButton, String nButton, final CallBack callBack, boolean canTouch) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if (!TextUtils.isEmpty(pButton))
@@ -147,6 +187,12 @@ public class ViewTool {
 
     private static boolean isShowingSnack = false;
 
+    /**
+     * 显示一个snackbar
+     * @param context
+     * @param recyclerView
+     * @param s
+     */
     public static void showSnack(@Nullable Context context, View recyclerView, String s) {
         if (!isShowingSnack) {
             Snackbar.make(recyclerView, s, Snackbar.LENGTH_SHORT)
@@ -161,6 +207,12 @@ public class ViewTool {
         }
     }
 
+    /**
+     * 显示一个toast
+     * @param context
+     * @param s
+     * @param lengthShort
+     */
     public static void showToast(Context context, String s, int lengthShort) {
         Toast.makeText(context, s, lengthShort).show();
     }

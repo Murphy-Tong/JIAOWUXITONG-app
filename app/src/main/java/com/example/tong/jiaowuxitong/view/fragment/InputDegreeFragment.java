@@ -1,7 +1,5 @@
 package com.example.tong.jiaowuxitong.view.fragment;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,9 +16,9 @@ import com.example.tong.jiaowuxitong.entity.VOStdCrs;
 import com.example.tong.jiaowuxitong.net.GsonUtil;
 import com.example.tong.jiaowuxitong.net.Message;
 import com.example.tong.jiaowuxitong.net.NetUtil;
+import com.example.tong.jiaowuxitong.view.custom.ViewTool;
 import com.example.tong.jiaowuxitong.view.views.InputDegreeActivity;
 import com.example.tong.jiaowuxitong.view.views.adapter.MyRecycAdapter;
-import com.example.tong.jiaowuxitong.view.custom.ViewTool;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ import de.greenrobot.event.ThreadMode;
 
 /**
  * Created by TONG on 2017/1/22.
+ * 教师填写学生成绩页面
  */
 public class InputDegreeFragment extends BaseFragment implements MyRecycAdapter.CallBack {
 
@@ -78,39 +77,24 @@ public class InputDegreeFragment extends BaseFragment implements MyRecycAdapter.
     private MyRecycAdapter adapter;
 
 
+    /**
+     * 提交学生成绩
+     * @param view
+     */
     private void submitDegree(View view) {
-       /* ArrayList<VOStdCrs> voStdCrses = adapter.getdDatas();
-        if (voStdCrses == null || voStdCrses.size() == 0) {
-            Snackbar.make(view, "has not degree any one", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Action", null).show();
-            return;
-        }
-
-        NetUtil.asyncPost(GsonUtil.toJson(voStdCrses, new TypeToken<ArrayList<VOStdCrs>>() {
-        }.getType()), GlobalResource.host + "sc-updateDegree.do", DEGREE_SUBMIT_TAG);*/
-//        InputManager inputManager = (InputManager) mContext.getSystemService(Context.INPUT_SERVICE);
-//            fab.setClickable(false);
         adapter.setCallBack(new MyRecycAdapter.OnFinish() {
             @Override
             public void onFinish() {
-
-//                NetUtil.asyncPost(GsonUtil.toJson(course), GlobalResource.host + "sc-getUndgreedStudentOfCourse.do", GET_UNDEGREED_STD_TAG_CHECK);
-//                fab.setClickable(true);
             }
 
             @Override
             public void onLoading(int size) {
-
             }
 
             @Override
             public void onAllSubmit() {
-//                ViewTool.showAlert(mContext, "to see detail?", "yes", "no", new ViewTool.CallBack() {
-//                    @Override
-//                    public void onPositiveChoose() {
+                //检查是否还有漏网之鱼
                 NetUtil.asyncPost(GsonUtil.toJson(course), GlobalResource.GET_UNDEGREE_STD_OF_COURSE, GET_UNDEGREED_STD_TAG_CHECK);
-//                    }
-//                });
             }
         });
         adapter.doSubmit();
@@ -120,13 +104,13 @@ public class InputDegreeFragment extends BaseFragment implements MyRecycAdapter.
     @Override
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onGet(Message message) {
-        if (message != null && message.tag == GET_UNDEGREED_STD_TAG) {
+        if (message != null && message.tag == GET_UNDEGREED_STD_TAG) {//获取的需要打分的学生
             ArrayList<VOStdCrs> ls = GsonUtil.fromJson((String) message.msg, new TypeToken<ArrayList<VOStdCrs>>() {
             }.getType());
             if (ls != null) {
                 adapter.setDatas(ls);
             }
-        } else if (message != null && message.tag == DEGREE_SUBMIT_TAG) {
+        } else if (message != null && message.tag == DEGREE_SUBMIT_TAG) {//服务器更新学生成绩返回信息
             ActionState actionState = GsonUtil.fromJson((String) message.msg, ActionState.class);
             if (actionState != null) {
                 if (actionState.tag == ActionState.ACTION_SUCCESS) {
@@ -135,7 +119,7 @@ public class InputDegreeFragment extends BaseFragment implements MyRecycAdapter.
                     ViewTool.showAlert(mContext, "error");
                 }
             }
-        } else if (message != null && message.tag == GET_UNDEGREED_STD_TAG_CHECK) {
+        } else if (message != null && message.tag == GET_UNDEGREED_STD_TAG_CHECK) {//检查是否还有漏网之鱼
             if (message.msg == null) {
                 startNewActivity();
             } else {
@@ -144,6 +128,7 @@ public class InputDegreeFragment extends BaseFragment implements MyRecycAdapter.
                 if (ls == null || ls.size() == 0) {
                     startNewActivity();
                 } else {
+                    //提示还有漏网之鱼
                     ViewTool.showAlert(mContext, ls.size() + mContext.getString(R.string.c_std_not_degree), mContext.getString(R.string.yes_button_text), null, null);
                     adapter.setDatas(ls);
                 }
@@ -162,7 +147,6 @@ public class InputDegreeFragment extends BaseFragment implements MyRecycAdapter.
     }
 
 
-
     public void onBackPressed(final onBackConfrim onBackConfrim) {
         int i = adapter.requestBack();
         if (i != 0) {
@@ -173,7 +157,7 @@ public class InputDegreeFragment extends BaseFragment implements MyRecycAdapter.
 
                         @Override
                         public void onFinish() {
-                            if(onBackConfrim!=null){
+                            if (onBackConfrim != null) {
                                 onBackConfrim.onConfrim();
                             }
                         }
@@ -186,7 +170,7 @@ public class InputDegreeFragment extends BaseFragment implements MyRecycAdapter.
                         @Override
                         public void onAllSubmit() {
 
-                            if(onBackConfrim!=null){
+                            if (onBackConfrim != null) {
                                 onBackConfrim.onConfrim();
                             }
 
@@ -198,7 +182,7 @@ public class InputDegreeFragment extends BaseFragment implements MyRecycAdapter.
         }
     }
 
-    public interface onBackConfrim{
+    public interface onBackConfrim {
         void onConfrim();
     }
 }

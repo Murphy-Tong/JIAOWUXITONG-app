@@ -33,7 +33,9 @@ import java.util.List;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 
-
+/**
+ * 教师评教详情页面
+ */
 public class TeacherEvalutionDetailFragment extends BaseFragment {
 
 
@@ -57,6 +59,11 @@ public class TeacherEvalutionDetailFragment extends BaseFragment {
     }
 
 
+    /**
+     * 填充数据
+     *
+     * @param message
+     */
     private void fillCintent(Message message) {
         Type type = new TypeToken<List<VOEvaluation>>() {
         }.getType();
@@ -69,7 +76,7 @@ public class TeacherEvalutionDetailFragment extends BaseFragment {
                 opts.add(evaluation.getDiscribe());
             }
         }
-
+        //opts 和 opinion都不为空时
         if (opts != null && voOpinion != null) {
             allOk();
         }
@@ -77,6 +84,10 @@ public class TeacherEvalutionDetailFragment extends BaseFragment {
 
     }
 
+
+    /**
+     * 初始化页面
+     */
     private void initView() {
         TextView textView = (TextView) getActivity().findViewById(R.id.stdcount);
         textView.setText(String.format(getResources().getString(R.string.t_eva_std_count), course.getStudentCount(), voOpinion.getUnEvaedStdCount()));

@@ -3,7 +3,6 @@ package com.example.tong.jiaowuxitong.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.ProgressBar;
 
 import com.example.tong.jiaowuxitong.GlobalResource;
 import com.example.tong.jiaowuxitong.R;
-import com.example.tong.jiaowuxitong.TestUtil;
 import com.example.tong.jiaowuxitong.entity.VOStdCrs;
 import com.example.tong.jiaowuxitong.net.GsonUtil;
 import com.example.tong.jiaowuxitong.net.Message;
@@ -41,25 +39,15 @@ import org.xutils.x;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link EvaResultFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 学生评教结果页
  */
 @ContentView(R.layout.activity_barchart)
 public class EvaResultFragment extends BaseFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     @ViewInject(R.id.barChart)
     private BarChart mChart;
     @ViewInject(R.id.pb)
@@ -70,21 +58,8 @@ public class EvaResultFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EvaResultFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static EvaResultFragment newInstance(String param1, String param2) {
         EvaResultFragment fragment = new EvaResultFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -92,10 +67,7 @@ public class EvaResultFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
             voStdCrs = (VOStdCrs) getArguments().getSerializable("body");
-
         }
     }
 
@@ -110,13 +82,15 @@ public class EvaResultFragment extends BaseFragment {
 
     private static final int Tag = 3221;
 
+    /**
+     * 从网络获取数据
+     */
     private void loadData() {
         if (voStdCrs != null) {
-            TestUtil.log("loaddate", voStdCrs.getCourseId() + voStdCrs.getName());
-
             NetUtil.asyncPost(GsonUtil.toJson(voStdCrs), GlobalResource.GET_EVA_DETAIL, Tag);
         }
     }
+
 
     @Override
     @Subscribe(threadMode = ThreadMode.MainThread)

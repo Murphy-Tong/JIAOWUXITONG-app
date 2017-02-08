@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import com.example.tong.jiaowuxitong.R;
 import com.example.tong.jiaowuxitong.entity.Query;
 import com.example.tong.jiaowuxitong.view.LoadingWhat;
-import com.example.tong.jiaowuxitong.view.fragment.ManagerStudentFragment;
+import com.example.tong.jiaowuxitong.view.fragment.ManagerFragment;
 import com.example.tong.jiaowuxitong.view.fragment.SearchResultFragment;
 
 public class ListSelectActivity extends BaseActivity {
@@ -30,12 +30,12 @@ public class ListSelectActivity extends BaseActivity {
             bundle = intent.getBundleExtra("bundle");
             if (bundle != null)
                 mTag = bundle.getInt(LoadingWhat.LOADING_WHAT, -1);
-            managerStudentFragment = (ManagerStudentFragment) Fragment.instantiate(this, ManagerStudentFragment.class.getName(), bundle);
+            managerStudentFragment = (ManagerFragment) Fragment.instantiate(this, ManagerFragment.class.getName(), bundle);
             getSupportFragmentManager().beginTransaction().add(R.id.container, managerStudentFragment).commit();
         }
     }
 
-    private ManagerStudentFragment managerStudentFragment;
+    private ManagerFragment managerStudentFragment;
     private SearchResultFragment searchResultFragment;
 
     private void reload(Query Query) {

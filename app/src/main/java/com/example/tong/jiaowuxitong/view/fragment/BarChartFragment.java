@@ -24,6 +24,9 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import java.util.ArrayList;
 
 
+/**
+ * 通用的barchart fragment
+ */
 public class BarChartFragment extends Fragment {
 
     private IAxisValueFormatter xAxisFormatter;
@@ -64,10 +67,14 @@ public class BarChartFragment extends Fragment {
     }
 
 
+    /**
+     * 初始化一下状态
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        com.example.tong.jiaowuxitong.TestUtil.log("onViewCreated", "onViewCreated");
         progressBar.setVisibility(View.VISIBLE);
         mChart.setVisibility(View.INVISIBLE);
         if (!isinited) {
@@ -76,6 +83,10 @@ public class BarChartFragment extends Fragment {
     }
 
 
+    /**
+     * 设置barchart中要显示的数据
+     * @param dataSets
+     */
     public void setData(ArrayList<IBarDataSet> dataSets) {
         if (mChart == null) return;
 

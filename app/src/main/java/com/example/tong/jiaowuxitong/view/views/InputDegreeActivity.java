@@ -14,6 +14,9 @@ import com.example.tong.jiaowuxitong.view.fragment.CourseDegreeFragment;
 import com.example.tong.jiaowuxitong.view.fragment.InputDegreeFragment;
 import com.example.tong.jiaowuxitong.view.views.adapter.MyRecycAdapter;
 
+/**
+ * 输入成绩activity
+ */
 public class InputDegreeActivity extends BaseActivity implements MyRecycAdapter.CallBack {
 
     private VOCourse course;
@@ -53,13 +56,13 @@ public class InputDegreeActivity extends BaseActivity implements MyRecycAdapter.
 
     @Override
     public void onBackPressed() {
-        if (over) {
+        if (over) {//提交完成 设置结果并退出
             Intent intent = new Intent();
             intent.putExtra("result", 1);
             intent.putExtra("course", course);
             setResult(1, intent);
             finishAfterTransition();
-        } else if (currentFragment.getClass().getName().equals(InputDegreeFragment.class.getName())) {
+        } else if (currentFragment.getClass().getName().equals(InputDegreeFragment.class.getName())) {//提交成绩界面 确认后退出
             currentFragment.onBackPressed(new InputDegreeFragment.onBackConfrim() {
                 @Override
                 public void onConfrim() {
@@ -78,7 +81,8 @@ public class InputDegreeActivity extends BaseActivity implements MyRecycAdapter.
 
     public void startNewActivity() {
         over = true;
-        ViewTool.showAlert(this, "to see course detail?", "ok", "no", new ViewTool.CallBack() {
+        //去查看课程学生成绩
+        ViewTool.showAlert(this, getString(R.string.to_see_crs_detail), getString(R.string.yes_button_text), getString(R.string.no_button_text), new ViewTool.CallBack() {
             @Override
             public void onPositiveChoose() {
                 Bundle bundle = new Bundle();

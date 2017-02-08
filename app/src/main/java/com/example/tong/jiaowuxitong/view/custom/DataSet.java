@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 /**
  * Created by TONG on 2017/1/20.
+ * barchart数据封装
  */
 public class DataSet {
     private ArrayList<BarEntry> le;

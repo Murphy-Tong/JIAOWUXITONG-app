@@ -48,29 +48,24 @@ public class CourseEvaluationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_course_evaluation);
         x.view().inject(this);
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setHome
         setUpToorBar(getString(R.string.course_eva));
-        voStdCrs = (VOStdCrs) getIntent().getExtras().get("obj");
 
-   /*     EventBus.getDefault().register(this);*/
+        voStdCrs = (VOStdCrs) getIntent().getExtras().get("obj");
         Bundle bundle = new Bundle();
         bundle.putSerializable("obj", voStdCrs);
-//        Fragment fragment = EvaSubmitFragment.getInstance();
+
         mainFragment = EvaluationFragment.instantiate(getApplicationContext(), EvaluationFragment.class.getName(), bundle);
         currentFragment = mainFragment;
         getSupportFragmentManager().beginTransaction().add(R.id.container, currentFragment).commit();
-//        readFile(voStdCrs);
-//        floatingActionButton.set
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        if (item.getItemId() == R.id.eva_save) {
-            ViewTool.showSnack(this,getWindow().getDecorView(),"save ok");
+        if (item.getItemId() == R.id.eva_save) {//保存选项
+            ViewTool.showSnack(this, getWindow().getDecorView(),getString(R.string.save_ok));
             saveChoose();
             return true;
         } /*else if (item.getItemId() == android.R.id.home) {
@@ -87,8 +82,7 @@ public class CourseEvaluationActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-
-
+        //当前页面是学生评教提交页面  按下了返回键 提示是否要保存一下信息
         if (currentFragment.getClass().getName().equals(EvaSubmitFragment.class.getName()) && choose != null && choose.length > 0 && !TextUtils.isEmpty(choose[0]) && Float.parseFloat(choose[0]) >= 0) {
             showAlert();
             return;
@@ -96,9 +90,8 @@ public class CourseEvaluationActivity extends BaseActivity {
         if (currentFragment.getClass().getName().equals(EvaluationFragment.class.getName()) && choose != null && choose.length > 0 && !TextUtils.isEmpty(choose[0]) && Float.parseFloat(choose[0]) >= 0) {
             showAlert();
             return;
-        }
-        else if(currentFragment.getClass().getName().equals(EvaResultFragment.class.getName())){
-            Message message = new Message(Message.NOTIFYCHANGED,voStdCrs);
+        } else if (currentFragment.getClass().getName().equals(EvaResultFragment.class.getName())) {//当前是学生评教结果页面 发送一个stickyMessage以便回到主界面后更新信息
+            Message message = new Message(Message.NOTIFYCHANGED, voStdCrs);
             EventBus.getDefault().postSticky(message);
             EventBus.getDefault().unregister(this);
             finishAfterTransition();
@@ -118,7 +111,7 @@ public class CourseEvaluationActivity extends BaseActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ViewTool.showToast(CourseEvaluationActivity.this,getString(R.string.save_ok), Toast.LENGTH_SHORT);
+                ViewTool.showToast(CourseEvaluationActivity.this, getString(R.string.save_ok), Toast.LENGTH_SHORT);
                 IOUtil.writeStringSet(getApplicationContext(), choose, OPTSFILE, EVA_CHOOSE + voStdCrs.getId(), null);
                 finishAfterTransition();
             }
@@ -137,9 +130,10 @@ public class CourseEvaluationActivity extends BaseActivity {
 
     private Fragment currentFragment;
 
+
     @Override
     public void onGet(Message msg) {
-        if (msg != null && msg.tag == CHANGE_CONTENT_TAG) {
+        if (msg != null && msg.tag == CHANGE_CONTENT_TAG) {//切换到提交界面
             Bundle bundle = new Bundle();
             if (msg.msg != null) {
                 //TODO
@@ -158,7 +152,7 @@ public class CourseEvaluationActivity extends BaseActivity {
             }
         }
 
-        if (msg != null && msg.tag == CHANGE_CONTENT_TAG_RESULT) {
+        if (msg != null && msg.tag == CHANGE_CONTENT_TAG_RESULT) {//切换的结果界面
 
             VOOpinion voOpinion = (VOOpinion) msg.msg;
             Bundle bundle = new Bundle();
@@ -174,7 +168,6 @@ public class CourseEvaluationActivity extends BaseActivity {
             currentFragment = fragment;
         }
     }
-
 
 
 }

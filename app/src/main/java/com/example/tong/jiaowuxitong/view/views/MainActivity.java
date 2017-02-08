@@ -24,7 +24,6 @@ import com.example.tong.jiaowuxitong.net.Md5Digest;
 import com.example.tong.jiaowuxitong.net.Message;
 import com.example.tong.jiaowuxitong.net.NetUtil;
 import com.example.tong.jiaowuxitong.net.TextUtil;
-import com.example.tong.jiaowuxitong.view.custom.ViewTool;
 import com.google.gson.Gson;
 
 import org.xutils.view.annotation.ContentView;
@@ -35,6 +34,9 @@ import org.xutils.x;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 
+/**
+ * 登录界面
+ */
 @ContentView(R.layout.layout_login)
 public class MainActivity extends BaseActivity {
 
@@ -67,6 +69,11 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    /**
+     * 检查并登录
+     *
+     * @param v
+     */
     @Event(type = View.OnClickListener.class, value = R.id.login)
     private void tryLogin(View v) {
 
@@ -93,20 +100,16 @@ public class MainActivity extends BaseActivity {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-//            showProgress(true);
-//            mAuthTask = new UserLoginTask(email, password);
-//            mAuthTask.execute((Void) null);
+
             login(Integer.parseInt(un), pwd);
-//            TestUtil.toast(this,"login");
         }
     }
 
+    /**
+     * 处理登录结果
+     */
     @Override
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onGet(Message msg) {
@@ -119,19 +122,19 @@ public class MainActivity extends BaseActivity {
         if (msg != null && msg.tag == Message.LOGIN) {
             handleSuccess((String) msg.msg);
         } else if (msg == null || (msg != null && msg.tag == Message.FAILED_TAG)) {
-            errorText.setVisibility(View.VISIBLE);
+            errorText.setVisibility(View.VISIBLE);//其他错误信息
         }
     }
 
     private void handleSuccess(String msg) {
         VOUser user = new Gson().fromJson(msg, VOUser.class);
-        if (user != null && user.getId() == -1) {
+        if (user != null && user.getId() == -1) {//没这个人
             username.setError(getString(R.string.user_not_found));
             return;
         }
 
         if (user != null && user.getId() == -2) {
-            password.setError(getString(R.string.pwd_error));
+            password.setError(getString(R.string.pwd_error));//密码错误
             return;
         }
         if (tag == VOUser.MANAGER_TAG) {
@@ -147,17 +150,27 @@ public class MainActivity extends BaseActivity {
         }
 
         saveUser(user);
-        ViewTool.dismissAlertFragment();
 //        EventBus.getDefault().unregister(this);
         this.finishAfterTransition();
     }
 
+    /**
+     * 保存当前用户  未完成功能
+     *
+     * @param user
+     */
     private void saveUser(VOUser user) {
         IOUtil.writeObj(this, user, "user", null);
     }
 
     private int tag;
 
+    /**
+     * 装载 登录
+     *
+     * @param id
+     * @param password
+     */
     private void login(int id, String password) {
         int checkedId = radioGroup.getCheckedRadioButtonId();
         Md5Digest md5Digest = new Md5Digest("jwxt", "MD5");
@@ -204,7 +217,11 @@ public class MainActivity extends BaseActivity {
 
     private String loginUrl;
 
-
+    /**
+     * 设置主机地址
+     *
+     * @param view
+     */
     @Event(type = View.OnClickListener.class, value = {R.id.host})
     private void radioGroupClick(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

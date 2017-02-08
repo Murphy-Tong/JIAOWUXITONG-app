@@ -29,7 +29,7 @@ import com.example.tong.jiaowuxitong.GlobalResource;
 import com.example.tong.jiaowuxitong.R;
 import com.example.tong.jiaowuxitong.entity.Query;
 import com.example.tong.jiaowuxitong.view.LoadingWhat;
-import com.example.tong.jiaowuxitong.view.fragment.ManagerStudentFragment;
+import com.example.tong.jiaowuxitong.view.fragment.ManagerFragment;
 import com.example.tong.jiaowuxitong.view.fragment.SearchResultFragment;
 
 import org.xutils.view.annotation.ContentView;
@@ -37,9 +37,12 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+/**
+ * 管理员界面
+ */
 @ContentView(R.layout.activity_manager)
 public class ManagerActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ManagerStudentFragment.ScrollCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, ManagerFragment.ScrollCallback {
 
     private static final int ADD = 1;
     /**
@@ -74,7 +77,7 @@ public class ManagerActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
-
+        //初始显示std界面
         showStd();
 
     }
@@ -90,8 +93,8 @@ public class ManagerActivity extends BaseActivity
             Bundle bundle = new Bundle();
             bundle.putInt(LoadingWhat.LOADING_WHAT, LoadingWhat.STUDENTS);
             bundle.putString(LoadingWhat.LOAD_URL, GlobalResource.GET_ALL_STD_PAGE);
-            currentFragment = stdFragment = (ManagerStudentFragment) Fragment.instantiate(this, ManagerStudentFragment.class.getName(), bundle);
-            ((ManagerStudentFragment) stdFragment).setScrollCallback(this);
+            currentFragment = stdFragment = (ManagerFragment) Fragment.instantiate(this, ManagerFragment.class.getName(), bundle);
+            ((ManagerFragment) stdFragment).setScrollCallback(this);
         }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (!stdFragment.isAdded()) {
@@ -126,11 +129,12 @@ public class ManagerActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {//关闭drawer
             drawer.closeDrawer(GravityCompat.START);
             return;
         }
 
+        //退出search
         if (currentFragment != null && currentFragment.getClass().getName().equals(SearchResultFragment.class.getName())) {
             getSupportFragmentManager().popBackStackImmediate();
             currentFragment = tmp;
@@ -138,6 +142,7 @@ public class ManagerActivity extends BaseActivity
             return;
         }
 
+        //确认退出程序
         if (finish) {
             this.finish();
         } else {
@@ -149,6 +154,9 @@ public class ManagerActivity extends BaseActivity
         super.onBackPressed();
     }
 
+    /**
+     * 设置title
+     */
     private void changeTitle() {
         if (mTag == LoadingWhat.STUDENTS)
             getSupportActionBar().setTitle(R.string.manage_std);
@@ -178,7 +186,7 @@ public class ManagerActivity extends BaseActivity
     //    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Event(type = View.OnClickListener.class, value = R.id.fab)
     private void onClick(View v) {
-        if (v.getId() == R.id.fab) {
+        if (v.getId() == R.id.fab) {//添加一个std 或 其他
             Intent intent = new Intent(this, AddActivity.class);
             Bundle bundle = new Bundle();
             bundle.putInt(LoadingWhat.LOADING_WHAT, currentAction);
@@ -199,9 +207,9 @@ public class ManagerActivity extends BaseActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD && data != null) {
-            ((ManagerStudentFragment) currentFragment).addItem(data.getSerializableExtra("body"));
-        } else if (requestCode == QUERY && data != null) {
+        if (requestCode == ADD && data != null) {//添加成功后
+            ((ManagerFragment) currentFragment).addItem(data.getSerializableExtra("body"));
+        } else if (requestCode == QUERY && data != null) {//处理查询
             Query query = (Query) data.getSerializableExtra("body");
 
             if (query == null) return;
@@ -210,16 +218,16 @@ public class ManagerActivity extends BaseActivity
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             Bundle bundle = new Bundle();
             bundle.putSerializable("body", query);
-            if (searchResultFragment == null) {
+            if (searchResultFragment == null) {//初始化search
                 searchResultFragment = (SearchResultFragment) Fragment.instantiate(this, SearchResultFragment.class.getName(), bundle);
             }/* else {
                 searchResultFragment.getArguments().putSerializable("body", query);
 //                searchResultFragment.changeKey(query);
             }*/
-            if (searchResultFragment.isVisible()) {
+            if (searchResultFragment.isVisible()) {//当前就是search界面 改变查询关键字
                 searchResultFragment.changeKey(query);
                 return;
-            } else {
+            } else {//否则设置到bundle里
                 searchResultFragment.setArguments(bundle);
             }
             if (!searchResultFragment.isAdded()) {
@@ -260,10 +268,10 @@ public class ManagerActivity extends BaseActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) {//drawer 菜单点击处理
         // Handle navigation view item clicks here.
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (currentFragment.getClass().getName().equals(SearchResultFragment.class.getName())) {
+        if (currentFragment.getClass().getName().equals(SearchResultFragment.class.getName())) {//当前是search 先退出
             fragmentManager.popBackStackImmediate();
         }
         int id = item.getItemId();
@@ -273,8 +281,8 @@ public class ManagerActivity extends BaseActivity
             if (clsFragment == null) {
                 bundle.putString(LoadingWhat.LOAD_URL, GlobalResource.GET_ALL_COURSE_PAGE);
                 bundle.putInt(LoadingWhat.LOADING_WHAT, LoadingWhat.COURSES);
-                clsFragment = (ManagerStudentFragment) Fragment.instantiate(this, ManagerStudentFragment.class.getName(), bundle);
-                ((ManagerStudentFragment) clsFragment).setScrollCallback(this);
+                clsFragment = (ManagerFragment) Fragment.instantiate(this, ManagerFragment.class.getName(), bundle);
+                ((ManagerFragment) clsFragment).setScrollCallback(this);
             }
             if (!clsFragment.isAdded()) {
                 transaction.add(R.id.container, clsFragment);
@@ -291,8 +299,8 @@ public class ManagerActivity extends BaseActivity
             if (dptFragment == null) {
                 bundle.putString(LoadingWhat.LOAD_URL, GlobalResource.GET_DEPT_PAGE);
                 bundle.putInt(LoadingWhat.LOADING_WHAT, LoadingWhat.DEPTS);
-                dptFragment = (ManagerStudentFragment) Fragment.instantiate(this, ManagerStudentFragment.class.getName(), bundle);
-                ((ManagerStudentFragment) dptFragment).setScrollCallback(this);
+                dptFragment = (ManagerFragment) Fragment.instantiate(this, ManagerFragment.class.getName(), bundle);
+                ((ManagerFragment) dptFragment).setScrollCallback(this);
             }
             if (!dptFragment.isAdded()) {
                 transaction.add(R.id.container, dptFragment);
@@ -311,8 +319,8 @@ public class ManagerActivity extends BaseActivity
             if (thrFragment == null) {
                 bundle.putString(LoadingWhat.LOAD_URL, GlobalResource.GET_ALLTEACHER_PAGE);
                 bundle.putInt(LoadingWhat.LOADING_WHAT, LoadingWhat.TEACHERS);
-                thrFragment = (ManagerStudentFragment) Fragment.instantiate(this, ManagerStudentFragment.class.getName(), bundle);
-                ((ManagerStudentFragment) thrFragment).setScrollCallback(this);
+                thrFragment = (ManagerFragment) Fragment.instantiate(this, ManagerFragment.class.getName(), bundle);
+                ((ManagerFragment) thrFragment).setScrollCallback(this);
             }
             if (!thrFragment.isAdded()) {
                 transaction.add(R.id.container, thrFragment);
@@ -336,7 +344,11 @@ public class ManagerActivity extends BaseActivity
 
     private boolean isShowing = true;
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+    /**
+     * 主界面滚动时 处理fab的显示状态  切换fragment时 显示
+     * @param scrollX
+     * @param scrollY
+     */
     @Override
     public void onScroll(int scrollX, int scrollY) {
         if (scrollY > 0) {

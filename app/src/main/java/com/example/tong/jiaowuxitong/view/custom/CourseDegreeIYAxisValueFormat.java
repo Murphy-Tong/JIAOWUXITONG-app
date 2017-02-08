@@ -5,6 +5,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 /**
  * Created by TONG on 2017/1/26.
+ * barchart Y坐标数据
  */
 public class CourseDegreeIYAxisValueFormat implements IAxisValueFormatter {
 

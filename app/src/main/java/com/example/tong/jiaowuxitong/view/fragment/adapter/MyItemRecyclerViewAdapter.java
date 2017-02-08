@@ -18,8 +18,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * TODO: Replace the implementation with code for your data type.
+ *一个recyclerview的adapter
+ * 根据USER_TAG 判断要处理的数据 Teacher or Student
+ * @return
  */
+
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
@@ -43,6 +46,11 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         return new ViewHolder(view);
     }
 
+    /**
+     * 根据USER_TAG 绑定数据
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
@@ -106,6 +114,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     private ArrayList<VOCourse> courses;
 
 
+    /**
+     * 从服务器 取得数据后 填充数据根据USER_TAG
+     * @param datas
+     */
     public void setData(ArrayList datas) {
 
         if (USER_TAG == VOUser.STUDENT_TAG) {
@@ -125,6 +137,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         }
     }
 
+    /**
+     *学生评教完成后，该表主页显示的评教状态信息
+     * @param voStdCrs
+     */
     public void notifyItemChanged(VOStdCrs voStdCrs) {
         if (USER_TAG == VOUser.STUDENT_TAG && stdcs != null) {
             View v = recyclerView.findViewWithTag(new Integer(voStdCrs.getId()));
@@ -132,7 +148,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 TextView tv = (TextView) v.findViewWithTag("s_evaluate");
                 if (tv != null && voStdCrs.getEvaDegree() > 0) {
                     tv.setText(R.string.evaed);
-                    Object o = tv.getTag();
                 }
                 int position = recyclerView.getChildPosition(v);
                 stdcs.set(position, voStdCrs);
@@ -140,6 +155,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         }
     }
 
+    /**
+     * 教师对学生打分后更新主页的未打分学生成绩数
+     * @param body
+     */
     public void updateItem(VOCourse body) {
         if (body == null) return;
         View view = recyclerView.findViewWithTag(new Integer(body.getId()));
@@ -155,6 +174,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     }
 
+    /**
+     * 绑定VIEW
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView s_courseName;
@@ -191,6 +213,11 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         }
     }
 
+    /**
+     * 获取list中id相同的course 更新信息
+     * @param v
+     * @return
+     */
     private VOCourse getFronList(VOCourse v) {
         if (courses != null) {
             Iterator<VOCourse> iterator = courses.iterator();
