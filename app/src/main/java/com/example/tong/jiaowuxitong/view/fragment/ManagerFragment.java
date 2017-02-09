@@ -281,6 +281,7 @@ public class ManagerFragment extends BaseFragment {
                 if (lvst == null) lvst = new ArrayList<>();
                 lvst.add(0, (VOTeacher) serializable);
             }
+            hasData();
             notifyItemInserted(0);
         }
 
@@ -432,20 +433,22 @@ public class ManagerFragment extends BaseFragment {
                 case LoadingWhat.COURSES:
                     if (lvsc != null && position < lvsc.size()) {
                         lvsc.remove(position);
+                        if(lvsc.size()==0) noData();
                     }
                     break;
                 case LoadingWhat.TEACHERS:
                     if (lvst != null && position < lvst.size()) {
                         lvst.remove(position);
+                        if(lvst.size()==0) noData();
                     }
                     break;
                 case LoadingWhat.STUDENTS:
                     if (lvss != null && position < lvss.size()) {
                         lvss.remove(position);
+                        if(lvss.size()==0) noData();
                     }
                     break;
             }
-
             myAdapter.notifyItemRemoved(position);
             myAdapter.notifyItemRangeChanged(position, getItemCount());
         }
