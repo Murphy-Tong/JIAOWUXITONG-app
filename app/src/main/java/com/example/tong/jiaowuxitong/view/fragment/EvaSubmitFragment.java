@@ -18,6 +18,7 @@ import com.example.tong.jiaowuxitong.net.GsonUtil;
 import com.example.tong.jiaowuxitong.net.IOUtil;
 import com.example.tong.jiaowuxitong.net.Message;
 import com.example.tong.jiaowuxitong.net.NetUtil;
+import com.example.tong.jiaowuxitong.view.custom.StringUtils;
 import com.example.tong.jiaowuxitong.view.custom.ViewTool;
 import com.example.tong.jiaowuxitong.view.views.BaseActivity;
 import com.example.tong.jiaowuxitong.view.views.CourseEvaluationActivity;
@@ -76,7 +77,7 @@ public class EvaSubmitFragment extends BaseFragment {
             total += voOpinion.getOpt10();
             total += voOpinion.getOpt11();
             if (tv != null)
-                tv.setText(String.format(getResources().getString(R.string.your_evaluation_total), total));
+                tv.setText(String.format(getResources().getString(R.string.your_evaluation_total), StringUtils.formatFloat(total,3)));
             //本地是否有保存评教额外信息
             String s = IOUtil.readString(mContext, OPT_EXTRA, OPT_EXTRA + voOpinion.getStdCrsId());
             if (!TextUtils.isEmpty(s) && et != null) {

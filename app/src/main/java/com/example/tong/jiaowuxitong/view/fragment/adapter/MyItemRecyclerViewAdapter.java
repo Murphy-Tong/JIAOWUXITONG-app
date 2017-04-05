@@ -18,8 +18,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- *一个recyclerview的adapter
+ * 一个recyclerview的adapter
  * 根据USER_TAG 判断要处理的数据 Teacher or Student
+ *
  * @return
  */
 
@@ -48,6 +49,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     /**
      * 根据USER_TAG 绑定数据
+     *
      * @param holder
      * @param position
      */
@@ -59,9 +61,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             holder.mView.setTag(new Integer(holder.voStdCrs.getId()));
             holder.s_teacherName.setText(holder.voStdCrs.getThrName());
             holder.s_courseName.setText(holder.voStdCrs.getName());
-            if(holder.voStdCrs.getDegree()<0){
+            if (holder.voStdCrs.getDegree() < 0) {
                 holder.s_degree.setText(R.string.undegree);
-            }else {
+            } else {
                 holder.s_degree.setText(String.format(context.getResources().getString(R.string.degree), StringUtils.formatFloat(holder.voStdCrs.getDegree(), 2)));
             }
             if (holder.voStdCrs.getEvaDegree() > 0) {
@@ -74,7 +76,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 @Override
                 public void onClick(View v) {
                     if (null != mListener) {
-                        mListener.onListFragmentInteraction(stdcs.get(position),holder.mView);
+                        mListener.onListFragmentInteraction(stdcs.get(position), holder.mView);
                     }
                 }
             });
@@ -90,13 +92,11 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 @Override
                 public void onClick(View v) {
                     if (null != mListener) {
-                        mListener.onListFragmentInteraction(holder.voCourse,holder.mView);
+                        mListener.onListFragmentInteraction(holder.voCourse, holder.mView);
                     }
                 }
             });
         }
-
-
     }
 
     @Override
@@ -116,6 +116,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     /**
      * 从服务器 取得数据后 填充数据根据USER_TAG
+     *
      * @param datas
      */
     public void setData(ArrayList datas) {
@@ -124,7 +125,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             if (stdcs == null)
                 this.stdcs = datas;
             else stdcs.addAll(datas);
-
             notifyDataSetChanged();
         }
 
@@ -138,7 +138,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     }
 
     /**
-     *学生评教完成后，该表主页显示的评教状态信息
+     * 学生评教完成后，该表主页显示的评教状态信息
+     *
      * @param voStdCrs
      */
     public void notifyItemChanged(VOStdCrs voStdCrs) {
@@ -150,13 +151,18 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                     tv.setText(R.string.evaed);
                 }
                 int position = recyclerView.getChildPosition(v);
-                stdcs.set(position, voStdCrs);
+                if (position < stdcs.size()) {
+                    voStdCrs.setThrName(stdcs.get(position).getThrName());
+                    voStdCrs.setName(stdcs.get(position).getName());
+                    stdcs.set(position, voStdCrs);
+                }
             }
         }
     }
 
     /**
      * 教师对学生打分后更新主页的未打分学生成绩数
+     *
      * @param body
      */
     public void updateItem(VOCourse body) {
@@ -215,6 +221,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     /**
      * 获取list中id相同的course 更新信息
+     *
      * @param v
      * @return
      */

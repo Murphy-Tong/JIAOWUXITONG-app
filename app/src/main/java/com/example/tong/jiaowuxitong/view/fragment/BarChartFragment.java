@@ -69,6 +69,7 @@ public class BarChartFragment extends Fragment {
 
     /**
      * 初始化一下状态
+     *
      * @param view
      * @param savedInstanceState
      */
@@ -85,6 +86,7 @@ public class BarChartFragment extends Fragment {
 
     /**
      * 设置barchart中要显示的数据
+     *
      * @param dataSets
      */
     public void setData(ArrayList<IBarDataSet> dataSets) {
@@ -151,6 +153,8 @@ public class BarChartFragment extends Fragment {
         xAxis.setValueFormatter(xAxisFormatter);
 
         YAxis leftAxis = mChart.getAxisLeft();
+        if (f != null)
+            mChart.getAxisLeft().setValueFormatter(f);
 //        leftAxis.setTypeface(mTfLight);
 //        leftAxis.setLabelCount(8, false);
         leftAxis.setValueFormatter(custom);
@@ -189,12 +193,13 @@ public class BarChartFragment extends Fragment {
     }
 
     private boolean isinited = false;
-
-    public void initChart(IAxisValueFormatter xAxisFormatter, IAxisValueFormatter custom, MarkerView mv, int count, String describe) {
+    private IAxisValueFormatter f;
+    public void initChart(IAxisValueFormatter xAxisFormatter, IAxisValueFormatter custom,IAxisValueFormatter f, MarkerView mv, int count, String describe) {
         this.xAxisFormatter = xAxisFormatter;
         this.custom = custom;
         this.describe = describe;
         this.mv = mv;
+        this.f = f;
         this.count = count;
         initChart();
     }

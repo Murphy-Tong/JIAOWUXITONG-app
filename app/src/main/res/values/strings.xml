@@ -115,7 +115,7 @@
     <string name="student_count_in_class">共:%1$d 人</string>
     <string name="undegree_student_count">%1$d 未被打分</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
-    <string name="your_evaluation_total">评估总分:%1$f</string>
+    <string name="your_evaluation_total">评估总分:%1$s</string>
     <string name="eva_c">%1$d/%2$d</string>
     <string name="evaDetail">您的评教分数:%1$s 超过本班%2$s</string>
     <string name="degreeDetail">您的分数:%1$s 超过本班%2$s</string>
@@ -189,4 +189,10 @@
     <string name="delete_succ">已删除!</string>
     <string name="action_succ">操作成功!</string>
     <string name="seems_none">好像没有了...</string>
+    <string name="deptUppassRate">本门课程不及格率:%1$s,占部门的前%2$s</string>
+    <string name="deptUnpassString">部门课程不及格率</string>
+    <string name="stdDegreeChart">学生成绩分布</string>
+    <string name="deptExcelString">部门课程优秀率</string>
+    <string name="deptExcelRate">本门课程优秀率:%1$s,占部门的前%2$s</string>
+    <string name="stdDegreeChart1">本门课程学生成绩分布</string>
 </resources>

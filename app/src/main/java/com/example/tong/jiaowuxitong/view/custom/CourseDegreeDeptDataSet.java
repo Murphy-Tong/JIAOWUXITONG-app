@@ -11,19 +11,27 @@ import java.util.ArrayList;
  */
 
 public class CourseDegreeDeptDataSet {
-    private ArrayList<BarEntry> le;
+    private ArrayList<BarEntry> excell;
+    private ArrayList<BarEntry> unpass;
 
-    public ArrayList<BarEntry> getLe() {
-        return le;
+    public ArrayList<BarEntry> getExcell() {
+        return excell;
+    }
+
+    public ArrayList<BarEntry> getUnpass() {
+        return unpass;
     }
 
     public CourseDegreeDeptDataSet(int s) {
-        le = new ArrayList<>(s);
+        excell = new ArrayList<>(s);
+        unpass = new ArrayList<>(s);
     }
 
     public void add(VOCourse voCourse) {
-        BarEntry barEntry = new BarEntry(le.size(), Float.valueOf(StringUtils.formatFloat(voCourse.getExcellentRate(), 2)));
-        le.add(barEntry);
+        BarEntry barEntry = new BarEntry(excell.size(), Float.valueOf(StringUtils.formatFloat(voCourse.getExcellentRate(), 2)));
+        excell.add(barEntry);
+        BarEntry barEntry2 = new BarEntry(unpass.size(), Float.valueOf(StringUtils.formatFloat(voCourse.getUnpassRate(), 2)));
+        unpass.add(barEntry2);
     }
 
 }

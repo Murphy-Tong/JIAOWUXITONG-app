@@ -80,6 +80,7 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         subingDatas.clear();
         isSubmiting = false;
         time = 0;
+        total = 0;
         position = 0;
         hasCalled = false;
         notifyDataSetChanged();
@@ -164,13 +165,14 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * 之前未提交或已提交但还没有完成   则 开始提交
      */
     public void doSubmit() {
-        if (!isSubmiting) {
+        if (!isSubmiting&&dDatas!=null&&dDatas.size()>0) {
             isSubmiting = true;
             doSubmit(new Message(MyRecycAdapter.SUBMIT_TAG, null));
         }
     }
 
     private int time = 0;
+    private int total = 0;
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void doSubmit(Message msg) {
@@ -181,18 +183,27 @@ public class MyRecycAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     ActionState as = GsonUtil.fromJson((String) msg.msg, ActionState.class);
                     if (as.tag == ActionState.ACTION_SUCCESS) {//提交成功
                         time++;//成功次数++
+                        total++;
                         subingDatas.remove(new Integer(dDatas.get(tmp)));//从正在提交列表中移除
                         subedDatas.add(dDatas.get(tmp));//加入一提交列表
                         notifyItemChanged(dDatas.get(tmp));//更新状态
                         if (time == dDatas.size()) {//选择的item全部提交完
                             isSubmiting = false;//
+                            dDatas.clear();
+                            time = 0;
+                            position=0;
                             if (onFinish != null)//两个回调
                                 onFinish.onFinish();
                             if (backFinish != null)
                                 backFinish.onFinish();
                         }
-                        if (time == datas.size()) {//全部的item都提交完成
-                            isSubmiting = false;
+                        if (total == datas.size()) {//全部的item都提交完成
+//                            datas.clear();
+//                            notifyDataSetChanged();
+//                            time = 0;
+//                            total = 0;
+//                            position = 0;
+//                            isSubmiting = false;
                             if (onFinish != null)
                                 onFinish.onAllSubmit();
                         }

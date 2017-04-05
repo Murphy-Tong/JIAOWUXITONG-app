@@ -23,54 +23,9 @@ public class DayAxisValueFormatter implements IAxisValueFormatter {
     public String getFormattedValue(float value, AxisBase axis) {
 
         return mMonths[((int) (value)) % mMonths.length];
-//        int days = (int) value;
-//
-//        int year = determineYear(days);
-//
-//        int month = determineMonth(days);
-//        String monthName = mMonths[month % mMonths.length];
-//        String yearName = String.valueOf(year);
-//
-//        if (chart.getVisibleXRange() > 30 * 6) {
-//
-//            return monthName + " " + yearName;
-//        } else {
-//
-//            int dayOfMonth = determineDayOfMonth(days, month + 12 * (year - 2016));
-
-//            String appendix = "th";
-//
-//            b_switch (dayOfMonth) {
-//                case 1:
-//                    appendix = "st";
-//                    break;
-//                case 2:
-//                    appendix = "nd";
-//                    break;
-//                case 3:
-//                    appendix = "rd";
-//                    break;
-//                case 21:
-//                    appendix = "st";
-//                    break;
-//                case 22:
-//                    appendix = "nd";
-//                    break;
-//                case 23:
-//                    appendix = "rd";
-//                    break;
-//                case 31:
-//                    appendix = "st";
-//                    break;
-//            }
-//
-//            return dayOfMonth == 0 ? "" : dayOfMonth + appendix + " " + monthName;
-//        }
     }
 
     private int getDaysForMonth(int month, int year) {
-
-        // month is 0-based
 
         if (month == 1) {
             int x400 = month % 400;

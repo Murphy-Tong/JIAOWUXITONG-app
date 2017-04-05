@@ -21,10 +21,13 @@ import com.example.tong.jiaowuxitong.view.custom.CourseDegreeIXAxisValueFormat;
 import com.example.tong.jiaowuxitong.view.custom.CourseDegreeIYAxisValueFormat;
 import com.example.tong.jiaowuxitong.view.custom.CourseDegreeStudentDataSet;
 import com.example.tong.jiaowuxitong.view.custom.CourseDegreeViewMaker;
+import com.example.tong.jiaowuxitong.view.custom.IntegerNumFormatter;
+import com.example.tong.jiaowuxitong.view.custom.MyAxisValueFormatter;
 import com.example.tong.jiaowuxitong.view.custom.StringUtils;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -33,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 
@@ -107,7 +109,8 @@ public class CourseDegreeFragment extends BaseFragment {
         IAxisValueFormatter iax = new CourseDegreeIXAxisValueFormat();
         IAxisValueFormatter iay = new CourseDegreeIYAxisValueFormat();
         MarkerView marker = new CourseDegreeViewMaker(mContext, iax);
-        chartFragment1.initChart(iax, iay, marker, 5, "学生成绩分布");
+        IAxisValueFormatter f = new MyAxisValueFormatter();
+        chartFragment1.initChart(iax, iay,f, marker, 5, mContext.getString(R.string.stdDegreeChart));
 
 
     }
@@ -116,6 +119,7 @@ public class CourseDegreeFragment extends BaseFragment {
 
     /**
      * 处理服务器数据
+     *
      * @param msg
      */
     @Override
@@ -159,20 +163,24 @@ public class CourseDegreeFragment extends BaseFragment {
                 }
             };
 //            MarkerView marker = new CourseDegreeViewMaker(mContext, iax);
-            chartFragment2.initChart(iax, iay, null, courses.size(), "部门课程优秀率");
+            chartFragment2.initChart(iax, iay, null,null, courses.size(), mContext.getString(R.string.deptExcelString));
 
             CourseDegreeDeptDataSet dataSet = new CourseDegreeDeptDataSet(courses.size());
             int c = 0;
+            int d = 0;
             for (VOCourse voCourse : courses
                     ) {
                 dataSet.add(voCourse);
                 if (voCourse.getExcellentRate() < this.voCourse.getExcellentRate()) {
                     c++;
                 }
+                if (voCourse.getUnpassRate() < this.voCourse.getUnpassRate()) {
+                    d++;
+                }
             }
 
 
-            BarDataSet set1 = new BarDataSet(dataSet.getLe(), "本门课程优秀率占部门的前" + StringUtils.float2PercentString(c * 1.f / courses.size(), 2));
+            BarDataSet set1 = new BarDataSet(dataSet.getExcell(), String.format(mContext.getString(R.string.deptExcelRate), StringUtils.float2PercentString(this.voCourse.getExcellentRate(), 2), StringUtils.float2PercentString(c * 1.f / courses.size(), 2)));
             set1.setColors(ColorTemplate.MATERIAL_COLORS);
 
             ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
@@ -187,13 +195,13 @@ public class CourseDegreeFragment extends BaseFragment {
             sort(vs, new Comparator<VOCourse>() {
                 @Override
                 public int compare(VOCourse lhs, VOCourse rhs) {
-                    return (int) (lhs.getUnpassRate() - rhs.getUnpassRate());
+                    return (lhs.getUnpassRate() - rhs.getUnpassRate() > 0 ? 1 : -1);
                 }
             });
 
-            chartFragment3.initChart(iax, iay, null, courses.size(), "部门课程不及格率");
+            chartFragment3.initChart(iax, iay, null,null, courses.size(), mContext.getString(R.string.deptUnpassString));
 
-            dataSet = new CourseDegreeDeptDataSet(courses.size());
+           /* dataSet = new CourseDegreeDeptDataSet(courses.size());
             c = 0;
             for (VOCourse voCourse : vs
                     ) {
@@ -202,9 +210,9 @@ public class CourseDegreeFragment extends BaseFragment {
                     c++;
                 }
             }
+*/
 
-
-            set1 = new BarDataSet(dataSet.getLe(), "本门课程不及格率占部门的前" + StringUtils.float2PercentString(c * 1.f / courses.size(), 2));
+            set1 = new BarDataSet(dataSet.getUnpass(), String.format(mContext.getString(R.string.deptUppassRate), StringUtils.float2PercentString(this.voCourse.getUnpassRate(), 2), StringUtils.float2PercentString(d * 1.f / courses.size(), 2)));
             set1.setColors(ColorTemplate.MATERIAL_COLORS);
 
             dataSets = new ArrayList<IBarDataSet>();
@@ -219,15 +227,15 @@ public class CourseDegreeFragment extends BaseFragment {
         if (data != null) {
 
             CourseDegreeStudentDataSet dataSet = new CourseDegreeStudentDataSet();
-            int c = 0;
+
             for (Float f : data
                     ) {
                 dataSet.add(f);
             }
+            BarDataSet set1 = new BarDataSet(dataSet.getLe(), mContext.getString(R.string.stdDegreeChart1));
 
-            BarDataSet set1 = new BarDataSet(dataSet.getLe(), "本门课程学生成绩分布");
             set1.setColors(ColorTemplate.MATERIAL_COLORS);
-
+            set1.setValueFormatter(new IntegerNumFormatter());
             ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
             dataSets.add(set1);
             chartFragment1.setData(dataSets);

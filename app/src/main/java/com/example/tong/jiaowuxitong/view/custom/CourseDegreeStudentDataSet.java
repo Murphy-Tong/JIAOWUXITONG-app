@@ -25,8 +25,6 @@ public class CourseDegreeStudentDataSet {
 
     public void add(float degree) {
 
-        BarEntry barEntry;
-
         if (degree >= 90) {
             //great
             le.get(4).setY(le.get(4).getY() + 1);
