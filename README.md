@@ -5,6 +5,7 @@
 #部分界面截图
 #
 
+<img src="https://github.com/Yotakot/JIAOWUXITONG-app/blob/master/Screenshots/1.png" width = "50%" height="50%" />
 ![image{0.5}](https://github.com/Yotakot/JIAOWUXITONG-app/blob/master/Screenshots/1.png)
 ![image](https://github.com/Yotakot/JIAOWUXITONG-app/blob/master/Screenshots/3.png)
 ![image](https://github.com/Yotakot/JIAOWUXITONG-app/blob/master/Screenshots/4.png)
